@@ -1,0 +1,95 @@
+/* src/styles/global.css */
+
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Set default font family */
+body {
+    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+/* Typography styles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: bold;
+    color: #222;
+}
+
+p {
+    line-height: 1.6;
+    color: #555;
+}
+
+/* Links */
+a {
+    text-decoration: none;
+    color: #007bff;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #0056b3;
+}
+
+/* Buttons */
+button,
+a.button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover,
+a.button:hover {
+    background-color: #0056b3;
+}
+
+/* Navigation */
+nav {
+    display: flex;
+    justify-content: center;
+    background-color: #fff;
+    padding: 10px 0;
+}
+
+nav a {
+    margin: 0 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+nav a:hover {
+    color: #007bff;
+}
+
+/* Center content */
+.center-content {
+    text-align: center;
+    padding: 50px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    nav a {
+        margin: 0 10px;
+    }
+
+    .center-content {
+        padding: 20px;
+    }
+}
