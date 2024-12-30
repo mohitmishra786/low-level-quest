@@ -1,0 +1,37 @@
+.problems-page {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+}
+
+.title {
+    text-align: center;
+    color: #333;
+}
+
+.problem-list {
+    list-style: none;
+    padding: 0;
+}
+
+.problem-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 4px;
+}
+
+.problem-link {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.difficulty {
+    color: #888;
+}
