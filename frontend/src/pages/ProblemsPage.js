@@ -10,7 +10,7 @@ function ProblemsPage() {
   useEffect(() => {
     const fetchProblems = async () => {
       try {
-        const response = await API.get("/api/problems");
+        const response = await API.get("api/problems");
         setProblems(response.data);
       } catch (error) {
         console.error("Failed to fetch problems", error);
