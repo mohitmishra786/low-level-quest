@@ -1,6 +1,6 @@
 // frontend/src/pages/LoginPage.js
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../utils/api"; // Import the api utility
 import { Link } from "react-router-dom";
 
 function LoginPage() {
@@ -10,7 +10,7 @@ function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/auth/login", {
+      const response = await api.post("/api/auth/login", {
         username,
         password,
       });
