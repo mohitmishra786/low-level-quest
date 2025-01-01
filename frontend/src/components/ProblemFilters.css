@@ -1,0 +1,40 @@
+.filter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.filter-btn,
+.pick-any-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: 1px solid #333;
+    background-color: #1e1e1e;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover,
+.pick-any-btn:hover {
+    background-color: #2d2d2d;
+}
+
+.filter-btn.active {
+    background-color: #4a4a4a;
+    border-color: #666;
+}
+
+.pick-any-btn {
+    background-color: #2d2d2d;
+}
