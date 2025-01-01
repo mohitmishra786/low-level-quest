@@ -3,9 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import ProblemsPage from "./pages/ProblemsPage";
-import ProblemSolvingPage from "./pages/ProblemSolvingPage";
+import ProblemPage from "./pages/ProblemPage";
 import HomePage from "./pages/HomePage";
-import API from "./utils/api"; // Corrected import path
 
 function App() {
   return (
@@ -15,7 +14,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/problems" element={<ProblemsPage />} />
-        <Route path="/problem-solving" element={<ProblemSolvingPage />} />
+        <Route path="/problem/:id" element={<ProblemPage />} />
       </Routes>
     </Router>
   );
