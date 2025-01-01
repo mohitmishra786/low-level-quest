@@ -1,7 +1,8 @@
-// frontend/src/pages/LoginPage.js
 import React, { useState } from "react";
-import api from "../utils/api"; // Import the api utility
 import { Link } from "react-router-dom";
+import AuthNavBar from "../components/AuthNavBar";
+import api from "../utils/api";
+import "./AuthPages.css";
 
 function LoginPage() {
   const [username, setUsername] = useState("");
@@ -22,23 +23,31 @@ function LoginPage() {
   };
 
   return (
-    <div className="center-content">
-      <h1>Login</h1>
-      <form onSubmit={handleLogin}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Login</button>
-      </form>
+    <div className="auth-container">
+      <AuthNavBar />
+      <div className="auth-content">
+        <div className="auth-box">
+          <h1>Login</h1>
+          <form onSubmit={handleLogin}>
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button type="submit">Login</button>
+          </form>
+          <p className="auth-link">
+            Don't have an account? <Link to="/signup">Sign up</Link>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
