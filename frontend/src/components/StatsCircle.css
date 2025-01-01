@@ -1,0 +1,28 @@
+.stats-circle {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+.stats-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.solved {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4caf50;
+}
+
+.total {
+    font-size: 16px;
+    color: #666;
+}
+
+circle {
+    transition: stroke-dashoffset 0.5s ease-in-out;
+}
