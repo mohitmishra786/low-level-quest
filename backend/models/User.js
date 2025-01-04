@@ -1,7 +1,7 @@
 const pool = require("../db");
 const bcrypt = require("bcrypt");
 
-class User {
+class UserModel {
   static async findByUsername(username) {
     const query = "SELECT * FROM users WHERE username = $1";
     const values = [username];
@@ -19,4 +19,4 @@ class User {
   }
 }
 
-module.exports = User;
+module.exports = UserModel;

@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-exports.signup = async (req, res) => {
+module.exports.signup = async (req, res) => {
   const { username, password } = req.body;
 
   try {
@@ -22,7 +22,7 @@ exports.signup = async (req, res) => {
   }
 };
 
-exports.login = async (req, res) => {
+module.exports.login = async (req, res) => {
   const { username, password } = req.body;
 
   try {
