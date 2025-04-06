@@ -6,13 +6,14 @@ import "./AuthPages.css";
 
 function SignupPage() {
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/api/auth/signup", { username, password });
+      await api.post("/api/auth/signup", { username, email, password });
       window.location.href = "/login";
     } catch (error) {
       setError(error.response?.data?.error || "Signup failed");
@@ -31,6 +32,12 @@ function SignupPage() {
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <input
               type="password"
