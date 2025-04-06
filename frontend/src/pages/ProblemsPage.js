@@ -53,6 +53,17 @@ function ProblemsPage() {
     return colors[difficulty] || "#fff";
   };
 
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case 'solved':
+        return <div className="status-icon solved" title="Solved" />;
+      case 'attempted':
+        return <div className="status-icon attempted" title="Attempted" />;
+      default:
+        return <div className="status-icon" title="Not attempted" />;
+    }
+  };
+
   return (
     <div className="app-container">
       <NavigationBar />
@@ -106,6 +117,7 @@ function ProblemsPage() {
                   <th>Title</th>
                   <th>Category</th>
                   <th>Difficulty</th>
+                  <th>Attempts</th>
                   <th>Created</th>
                 </tr>
               </thead>
@@ -113,7 +125,7 @@ function ProblemsPage() {
                 {problems.map((problem) => (
                   <tr key={problem.id}>
                     <td>
-                      <div className="status-icon" />
+                      {getStatusIcon(problem.status)}
                     </td>
                     <td>
                       <Link
@@ -123,17 +135,20 @@ function ProblemsPage() {
                         {problem.title}
                       </Link>
                     </td>
-                    <td>{problem.category || 'Uncategorized'}</td>
                     <td>
-                      <span
-                        style={{
-                          color: getDifficultyColor(problem.difficulty),
-                        }}
-                      >
+                      <span className="category-tag">
+                        {problem.category || 'Uncategorized'}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={`difficulty ${problem.difficulty}`}>
                         {problem.difficulty}
                       </span>
                     </td>
                     <td>
+                      {problem.attempts > 0 ? problem.attempts : '-'}
+                    </td>
+                    <td className="created-date">
                       {new Date(problem.created_at).toLocaleDateString()}
                     </td>
                   </tr>

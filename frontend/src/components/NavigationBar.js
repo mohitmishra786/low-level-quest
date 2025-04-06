@@ -10,10 +10,15 @@ function NavigationBar() {
     navigate("/login");
   };
 
+  const handleHomeClick = (e) => {
+    e.preventDefault();
+    navigate("/problems");
+  };
+
   return (
     <div className="navbar">
       <div className="navbar-left">
-        <Link to="/" className="logo">
+        <Link to="/problems" className="logo">
           Low-Level<span className="bytes-text">Quest</span>
         </Link>
       </div>
@@ -22,7 +27,7 @@ function NavigationBar() {
           <Link to="/problems" className="nav-link">
             Problems
           </Link>
-          <Link to="/" className="nav-link">
+          <Link to="/problems" className="nav-link" onClick={handleHomeClick}>
             Home
           </Link>
           <Link to="/contact" className="nav-link">

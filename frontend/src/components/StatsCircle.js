@@ -1,27 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./StatsCircle.css";
 
 function StatsCircle({ stats }) {
+  const [animatedPercentage, setAnimatedPercentage] = useState(0);
   const percentage = stats ? (stats.solved / stats.total) * 100 : 0;
   const radius = 45;
   const circumference = 2 * Math.PI * radius;
-  // Convert to string to fix the NaN warning
   const strokeDashoffset = String(
-    circumference - (percentage / 100) * circumference,
+    circumference - (animatedPercentage / 100) * circumference
   );
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAnimatedPercentage(percentage);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [percentage]);
+
+  const formatNumber = (num) => {
+    return num || 0;
+  };
 
   return (
     <div className="stats-circle-container">
-      <h3 className="stats-header">Your Stats</h3>
+      <h3 className="stats-header">Your Progress</h3>
       <div className="stats-circle">
-        <svg width="100" height="100" viewBox="0 0 100 100">
+        <svg width="120" height="120" viewBox="0 0 100 100">
           <circle
             cx="50"
             cy="50"
             r={radius}
             fill="none"
-            stroke="#333"
-            strokeWidth="5"
+            stroke="#2c2c2c"
+            strokeWidth="8"
           />
           <circle
             cx="50"
@@ -29,34 +40,34 @@ function StatsCircle({ stats }) {
             r={radius}
             fill="none"
             stroke="#4CAF50"
-            strokeWidth="5"
+            strokeWidth="8"
+            strokeLinecap="round"
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
-            transform="rotate(-90 50 50)"
           />
         </svg>
         <div className="stats-number">
-          <span className="solved">{stats?.solved || 0}</span>
-          <span className="total">/{stats?.total || 0}</span>
+          <span className="solved">{formatNumber(stats?.solved)}</span>
+          <span className="total">/{formatNumber(stats?.total)}</span>
         </div>
       </div>
       <div className="difficulty-stats">
         <div className="stat-row easy">
           <span>Easy</span>
           <span>
-            {stats?.easy?.solved || 0}/{stats?.easy?.total || 0}
+            {formatNumber(stats?.easy?.solved)}/{formatNumber(stats?.easy?.total)}
           </span>
         </div>
         <div className="stat-row medium">
           <span>Medium</span>
           <span>
-            {stats?.medium?.solved || 0}/{stats?.medium?.total || 0}
+            {formatNumber(stats?.medium?.solved)}/{formatNumber(stats?.medium?.total)}
           </span>
         </div>
         <div className="stat-row hard">
           <span>Hard</span>
           <span>
-            {stats?.hard?.solved || 0}/{stats?.hard?.total || 0}
+            {formatNumber(stats?.hard?.solved)}/{formatNumber(stats?.hard?.total)}
           </span>
         </div>
       </div>
