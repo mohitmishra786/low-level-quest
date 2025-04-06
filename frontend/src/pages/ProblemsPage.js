@@ -9,11 +9,11 @@ function ProblemsPage() {
   const [problems, setProblems] = useState([]);
   const [activeFilter, setActiveFilter] = useState("all");
   const [userStats, setUserStats] = useState({
-    solved: 24,
-    total: 40,
-    easy: { solved: 12, total: 13 },
-    medium: { solved: 10, total: 19 },
-    hard: { solved: 2, total: 8 },
+    solved: 0,
+    total: 0,
+    easy: { solved: 0, total: 0 },
+    medium: { solved: 0, total: 0 },
+    hard: { solved: 0, total: 0 },
   });
 
   useEffect(() => {
@@ -23,7 +23,22 @@ function ProblemsPage() {
   const fetchProblems = async () => {
     try {
       const response = await API.get("/api/problems");
+      console.log("Problems data:", response.data);
       setProblems(response.data);
+      
+      // Update stats based on actual data
+      const total = response.data.length;
+      const easy = response.data.filter(p => p.difficulty === 'Easy').length;
+      const medium = response.data.filter(p => p.difficulty === 'Medium').length;
+      const hard = response.data.filter(p => p.difficulty === 'Hard').length;
+      
+      setUserStats({
+        solved: 0,
+        total: total,
+        easy: { solved: 0, total: easy },
+        medium: { solved: 0, total: medium },
+        hard: { solved: 0, total: hard },
+      });
     } catch (error) {
       console.error("Failed to fetch problems:", error);
     }
@@ -89,17 +104,16 @@ function ProblemsPage() {
                 <tr>
                   <th>Status</th>
                   <th>Title</th>
-                  <th>Acceptance</th>
+                  <th>Category</th>
                   <th>Difficulty</th>
-                  <th>Tags</th>
-                  <th>Bookmark</th>
+                  <th>Created</th>
                 </tr>
               </thead>
               <tbody>
                 {problems.map((problem) => (
                   <tr key={problem.id}>
                     <td>
-                      <div className={`status-icon ${problem.status}`} />
+                      <div className="status-icon" />
                     </td>
                     <td>
                       <Link
@@ -109,7 +123,7 @@ function ProblemsPage() {
                         {problem.title}
                       </Link>
                     </td>
-                    <td>{problem.acceptance}%</td>
+                    <td>{problem.category || 'Uncategorized'}</td>
                     <td>
                       <span
                         style={{
@@ -120,20 +134,7 @@ function ProblemsPage() {
                       </span>
                     </td>
                     <td>
-                      <div className="tags">
-                        {problem.tags.map((tag, index) => (
-                          <span key={index} className="tag">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </td>
-                    <td>
-                      <button
-                        className={`bookmark-btn ${problem.bookmarked ? "active" : ""}`}
-                      >
-                        ★
-                      </button>
+                      {new Date(problem.created_at).toLocaleDateString()}
                     </td>
                   </tr>
                 ))}

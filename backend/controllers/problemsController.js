@@ -16,15 +16,14 @@ exports.getProblems = async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT
-        id,
-        title,
-        difficulty,
-        acceptance,
-        category,
-        tags,
-        status
-      FROM problems
-      ORDER BY id ASC
+        p.id,
+        p.title,
+        p.difficulty,
+        c.name as category,
+        p.created_at
+      FROM problems p
+      LEFT JOIN categories c ON p.category_id = c.id
+      ORDER BY p.id ASC
     `);
     res.json(result.rows);
   } catch (error) {
@@ -36,7 +35,7 @@ exports.getProblems = async (req, res) => {
 exports.getProblemById = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await pool.query("SELECT * FROM problems WHERE id = \$1", [
+    const result = await pool.query("SELECT * FROM problems WHERE id = $1", [
       id,
     ]);
 

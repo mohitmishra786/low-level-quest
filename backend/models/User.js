@@ -9,13 +9,20 @@ class User {
     return result.rows[0];
   }
 
-  static async create(username, password) {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const query =
-      "INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *";
-    const values = [username, hashedPassword];
-    const result = await pool.query(query, values);
-    return result.rows[0];
+  static async create(username, email, password) {
+    try {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const query =
+        "INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING *";
+      const values = [username, email, hashedPassword];
+      console.log("Query:", query);
+      console.log("Values:", values);
+      const result = await pool.query(query, values);
+      return result.rows[0];
+    } catch (error) {
+      console.error("Error in User.create:", error);
+      throw error;
+    }
   }
 }
 

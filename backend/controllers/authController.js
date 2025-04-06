@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 exports.signup = async (req, res) => {
-  const { username, password } = req.body;
+  const { username, email, password } = req.body;
 
   try {
     console.log("Signup request received for username:", username);
@@ -13,7 +13,7 @@ exports.signup = async (req, res) => {
       return res.status(400).json({ error: "Username already exists" });
     }
 
-    const user = await User.create(username, password);
+    const user = await User.create(username, email, password);
     console.log("User created:", user);
     res.status(201).json({ message: "Signup successful", user });
   } catch (error) {
@@ -32,7 +32,7 @@ exports.login = async (req, res) => {
       return res.status(400).json({ error: "User not found" });
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.password);
+    const passwordMatch = await bcrypt.compare(password, user.password_hash);
     if (!passwordMatch) {
       return res.status(400).json({ error: "Invalid credentials" });
     }
