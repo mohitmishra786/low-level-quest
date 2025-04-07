@@ -39,6 +39,15 @@ CREATE TABLE test_cases (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Create hints table
+CREATE TABLE hints (
+    id SERIAL PRIMARY KEY,
+    problem_id INTEGER REFERENCES problems(id),
+    content TEXT NOT NULL,
+    order_index INTEGER NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Create user_progress table
 CREATE TABLE user_progress (
     id SERIAL PRIMARY KEY,
@@ -52,10 +61,10 @@ CREATE TABLE user_progress (
 );
 
 -- Create discussions table
-CREATE TABLE discussions (
+CREATE TABLE IF NOT EXISTS discussions (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
-    problem_id INTEGER REFERENCES problems(id),
+    problem_id INTEGER REFERENCES problems(id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -63,14 +72,30 @@ CREATE TABLE discussions (
 );
 
 -- Create comments table
-CREATE TABLE comments (
+CREATE TABLE IF NOT EXISTS comments (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
-    discussion_id INTEGER REFERENCES discussions(id),
+    discussion_id INTEGER REFERENCES discussions(id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     content TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Create user_problem_status table
+CREATE TABLE IF NOT EXISTS user_problem_status (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    problem_id INTEGER REFERENCES problems(id) ON DELETE CASCADE,
+    status VARCHAR(20) NOT NULL CHECK (status IN ('attempted', 'solved')),
+    attempts INTEGER DEFAULT 0,
+    last_attempted_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    solved_at TIMESTAMP WITH TIME ZONE,
+    UNIQUE(user_id, problem_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_problem_status_user_id ON user_problem_status(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_problem_status_problem_id ON user_problem_status(problem_id);
+CREATE INDEX IF NOT EXISTS idx_user_problem_status_status ON user_problem_status(status);
 
 -- Insert initial categories
 INSERT INTO categories (name, description) VALUES
