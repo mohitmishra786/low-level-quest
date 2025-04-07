@@ -184,11 +184,11 @@ ${code}
     console.log('Test result details:');
     console.log('- Output:', result.output);
     console.log('- Expected output:', testCase.rows[0].expected_output);
-    console.log('- Passed:', result.passed);
+    console.log('- Passed status from executeCode:', result.passed);
     console.log('- Error:', result.error);
     
     // Manually compare the output with the expected output
-    const normalizedOutput = result.output?.trim().replace(/\r\n/g, '\n');
+    const normalizedOutput = result.output?.trim().replace(/\r\n/g, '\n') || '';
     const normalizedExpected = testCase.rows[0].expected_output.trim().replace(/\r\n/g, '\n');
     const manuallyPassed = normalizedOutput === normalizedExpected;
     
@@ -196,17 +196,27 @@ ${code}
     console.log('- Normalized output:', normalizedOutput);
     console.log('- Normalized expected:', normalizedExpected);
     console.log('- Manually passed:', manuallyPassed);
+    console.log('- Result success:', result.success);
     
-    res.json({
-      success: true,
+    // Return the successful response
+    console.log('Sending test result to client:', {
+      success: result.success,
       output: result.output,
       error: result.error,
-      executionTime: result.executionTime,
+      passed: manuallyPassed || result.passed
+    });
+
+    res.json({
+      success: true, // Execution was successful
+      output: result.output,
+      error: result.error,
       testCase: {
         input: testCase.rows[0].input,
-        expectedOutput: testCase.rows[0].expected_output
+        expectedOutput: testCase.rows[0].expected_output,
+        description: testCase.rows[0].description
       },
-      passed: manuallyPassed // Use the manually calculated passed value
+      passed: manuallyPassed || result.passed, // Use either the passed from executeCode or our manual check
+      executionTime: result.executionTime
     });
   } catch (error) {
     console.error('Failed to run code:', error);
@@ -247,12 +257,25 @@ exports.submitSolution = async (req, res) => {
       });
     }
 
-    // Wrap the user's code with our implementation of my_malloc and my_free
-    const wrappedCode = `
+    // Check if user's code already contains my_malloc and my_free implementations
+    const containsMyMalloc = code.includes('my_malloc');
+    const containsMyFree = code.includes('my_free');
+
+    console.log('Code contains my_malloc:', containsMyMalloc);
+    console.log('Code contains my_free:', containsMyFree);
+
+    // Wrap the user's code - only include our implementation if user didn't provide one
+    let wrappedCode = `
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+`;
+
+    // Only add our implementation if user didn't provide their own
+    if (!containsMyMalloc || !containsMyFree) {
+      console.log('Adding default memory allocation functions');
+      wrappedCode += `
 // Implementation of memory allocation functions
 void* my_malloc(size_t size) {
     return malloc(size);
@@ -261,11 +284,18 @@ void* my_malloc(size_t size) {
 void my_free(void* ptr) {
     free(ptr);
 }
+`;
+    } else {
+      console.log('Using user-provided memory allocation functions');
+    }
 
+    wrappedCode += `
 // User's code starts here
 ${code}
 // User's code ends here
     `;
+
+    console.log('Wrapped code prepared. Running tests...');
 
     // Run code against each test case
     const results = [];
@@ -273,20 +303,33 @@ ${code}
 
     for (const testCase of testCases.rows) {
       console.log('Running test case:', testCase.id);
-      const result = await executeCode(wrappedCode, testCase.input);
+      const result = await executeCode(wrappedCode, testCase.input, id);
       console.log('Test case result:', result);
       
-      const passed = result.output?.trim() === testCase.expected_output.trim();
-      console.log('Test case passed:', passed);
+      // Compare the outputs with consistent normalization
+      const actualOutput = result.output?.trim().replace(/\r\n/g, '\n') || '';
+      const expectedOutput = testCase.expected_output.trim().replace(/\r\n/g, '\n');
+      const passed = actualOutput === expectedOutput;
       
-      if (!passed) allPassed = false;
+      console.log('Test case comparison:');
+      console.log('- Actual output:', actualOutput);
+      console.log('- Expected output:', expectedOutput);
+      console.log('- Outputs match:', passed);
+      console.log('- Test passed from executeCode:', result.passed);
+      
+      // Use both our manual check and the execute code result
+      const testPassed = passed || result.passed;
+      console.log('- Final test passed status:', testPassed);
+      
+      if (!testPassed) allPassed = false;
       
       results.push({
         input: testCase.input,
         expectedOutput: testCase.expected_output,
         actualOutput: result.output,
-        passed,
-        error: result.error
+        passed: testPassed,
+        error: result.error,
+        description: testCase.description
       });
     }
 

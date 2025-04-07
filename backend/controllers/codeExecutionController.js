@@ -165,9 +165,25 @@ const executeCode = async (code, input, problemId) => {
           const lines = stdout.split('\n');
           console.log('Parsed lines:', lines);
           
+          // Check if test passed by looking for "Test passed" in the output
           const passed = lines.includes('Test passed');
           console.log('Test passed:', passed);
+
+          // Extract actual output - the actual user's program output
+          let actualOutput = '';
+          if (stdout.includes('Actual output:')) {
+            actualOutput = stdout.split('Actual output:')[1].split('\n')[0].trim();
+          } else {
+            // If we can't find the actual output marker, just use the first line
+            actualOutput = lines[0].trim();
+          }
+          console.log('Extracted actual output:', actualOutput);
           
+          // Compare actual output with expected output
+          const expectedOutput = testCases[0].expected_output.trim();
+          const outputsMatch = actualOutput === expectedOutput;
+          console.log('Outputs match:', outputsMatch, 'Actual:', actualOutput, 'Expected:', expectedOutput);
+
           const details = lines.join('\n');
           console.log('Test details:', details);
 
@@ -177,7 +193,8 @@ const executeCode = async (code, input, problemId) => {
             details: details || null,
             input: testCases[0].input,
             expectedOutput: testCases[0].expected_output,
-            actualOutput: passed ? testCases[0].expected_output : (details.includes('Got:') ? details.split('Got:')[1].trim() : 'No output')
+            actualOutput: passed ? testCases[0].expected_output : (details.includes('Got:') ? details.split('Got:')[1].trim() : actualOutput),
+            description: testCases[0].description
           }];
 
           // All tests passed if this one passed
@@ -185,14 +202,14 @@ const executeCode = async (code, input, problemId) => {
           console.log('All tests passed:', allPassed);
 
           resolve({
-            success: allPassed,
-            output: stdout || null,
+            success: true, // Set success to true if the execution completed without errors
+            output: actualOutput || null,
             error: stderr || null,
             testCase: {
               input: testCases[0].input,
               expectedOutput: testCases[0].expected_output
             },
-            passed: allPassed
+            passed: outputsMatch // Set passed based on if the output matches expected
           });
         });
       });
@@ -206,14 +223,25 @@ const executeCode = async (code, input, problemId) => {
 
 // API endpoint for code execution
 const executeCodeEndpoint = async (req, res) => {
-  const { code, problemId } = req.body;
+  const { code, input, problemId } = req.body;
+  
+  console.log('executeCodeEndpoint called with:', { 
+    codeLength: code?.length, 
+    inputLength: input?.length,
+    problemId 
+  });
   
   if (!code) {
     return res.status(400).json({ error: 'No code provided' });
   }
 
   try {
-    const result = await executeCode(code, null, problemId);
+    if (!problemId) {
+      console.log('WARNING: No problemId provided for executeCodeEndpoint');
+    }
+    
+    const result = await executeCode(code, input, problemId);
+    console.log('executeCodeEndpoint result:', result);
     res.json(result);
   } catch (error) {
     console.error('Error executing code:', error);
