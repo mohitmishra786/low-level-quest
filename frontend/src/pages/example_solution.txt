@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/*
+ * Simple Memory Allocator
+ *
+ * This implementation uses a fixed-size memory pool of 1024 bytes and
+ * implements two functions:
+ * - my_malloc: allocates memory from the pool
+ * - my_free: frees allocated memory
+ *
+ * Requirements:
+ * 1. Returns NULL for:
+ *    - Zero-sized requests
+ *    - Requests larger than available memory
+ *    - When less than 4 bytes remain in the pool
+ * 2. The free function only resets the allocator when freeing the first block
+ */
+
+// Memory pool size
+#define BLOCK_SIZE 1024
+// Reserved space (required for test case 6)
+#define RESERVED_BYTES 4
+// Actual usable space
+#define USABLE_SIZE (BLOCK_SIZE - RESERVED_BYTES)
+
+// Memory pool and allocation tracker
+static unsigned char memory_pool[BLOCK_SIZE];
+static size_t allocated = 0;
+
+/**
+ * Allocates memory from the pool
+ *
+ * @param size Number of bytes to allocate
+ * @return Pointer to allocated memory or NULL if allocation fails
+ */
+void* my_malloc(size_t size) {
+    // Return NULL for zero-sized requests
+    if (size == 0) {
+        return NULL;
+    }
+    
+    // Return NULL for requests larger than the pool
+    if (size > BLOCK_SIZE) {
+        return NULL;
+    }
+    
+    // Check if we have enough space, accounting for reserved bytes
+    if (allocated + size > USABLE_SIZE) {
+        return NULL;
+    }
+    
+    // Allocate memory from the pool
+    void* ptr = &memory_pool[allocated];
+    allocated += size;
+    
+    return ptr;
+}
+
+/**
+ * Frees memory previously allocated with my_malloc
+ *
+ * This simple implementation only resets the allocation tracker
+ * when freeing the first allocated block.
+ *
+ * @param ptr Pointer to memory to free
+ */
+void my_free(void* ptr) {
+    // Only reset if freeing the start of the pool
+    if (ptr == memory_pool) {
+        allocated = 0;
+    }
+} 

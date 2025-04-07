@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import Editor from "@monaco-editor/react";
 import NavigationBar from "../components/NavigationBar";
+import ProblemDescription from "../components/ProblemDescription";
 import API from "../utils/api";
 import "./ProblemSolvingPage.css";
 import DiscussionSection from '../components/DiscussionSection';
@@ -92,22 +93,25 @@ function ProblemSolvingPage() {
 
     const response = await API.post(`/api/problems/${id}/run`, { code });
     
+    console.log("Run code response:", response.data);
+    
     // Normalize response structure
     const testResult = {
-      passed: response.data.passed,
+      passed: response.data.passed === true, // Convert to boolean if needed
       results: [{
         input: response.data.testCase?.input,
         expectedOutput: response.data.testCase?.expectedOutput,
         actualOutput: response.data.output,
-        passed: response.data.passed,
-        error: response.data.error
+        passed: response.data.passed === true, // Convert to boolean if needed
+        error: response.data.error,
+        description: response.data.testCase?.description
       }]
     };
 
     setTestResults(testResult);
     setExecutionResult({
-      type: response.data.passed ? 'success' : 'error',
-      message: response.data.passed ? 'Execution Successful' : 'Execution Failed',
+      type: testResult.passed ? 'success' : 'error',
+      message: testResult.passed ? 'Execution Successful' : 'Execution Failed',
       // Don't show details here to avoid duplication
     });
 
@@ -193,6 +197,12 @@ function ProblemSolvingPage() {
                 Sample Test Case {index + 1} {result.passed ? '✓' : '✗'}
                 {result.error && <span className="error-badge">Error</span>}
               </div>
+              
+              {result.description && (
+                <div className="test-description">
+                  <em>{result.description}</em>
+                </div>
+              )}
               
               <div className="test-case-details">
                 <div className="test-expected">
@@ -459,9 +469,7 @@ function ProblemSolvingPage() {
 
           <div className="content-area">
             {activeTab === 'description' && (
-              <div className="problem-description">
-                <div dangerouslySetInnerHTML={{ __html: problem.description }} />
-              </div>
+              <ProblemDescription description={problem.description} />
             )}
 
             {activeTab === 'discussion' && (
