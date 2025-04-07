@@ -177,8 +177,25 @@ ${code}
     `;
 
     console.log('Executing code with test case:', testCase.rows[0]);
-    const result = await executeCode(wrappedCode, testCase.rows[0].input);
+    const result = await executeCode(wrappedCode, testCase.rows[0].input, req.params.id);
     console.log('Code execution result:', result);
+    
+    // Add debug logs to understand the test result
+    console.log('Test result details:');
+    console.log('- Output:', result.output);
+    console.log('- Expected output:', testCase.rows[0].expected_output);
+    console.log('- Passed:', result.passed);
+    console.log('- Error:', result.error);
+    
+    // Manually compare the output with the expected output
+    const normalizedOutput = result.output?.trim().replace(/\r\n/g, '\n');
+    const normalizedExpected = testCase.rows[0].expected_output.trim().replace(/\r\n/g, '\n');
+    const manuallyPassed = normalizedOutput === normalizedExpected;
+    
+    console.log('Manual comparison:');
+    console.log('- Normalized output:', normalizedOutput);
+    console.log('- Normalized expected:', normalizedExpected);
+    console.log('- Manually passed:', manuallyPassed);
     
     res.json({
       success: true,
@@ -188,7 +205,8 @@ ${code}
       testCase: {
         input: testCase.rows[0].input,
         expectedOutput: testCase.rows[0].expected_output
-      }
+      },
+      passed: manuallyPassed // Use the manually calculated passed value
     });
   } catch (error) {
     console.error('Failed to run code:', error);
