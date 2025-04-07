@@ -42,26 +42,30 @@ const compareOutputs = (actual, expected) => {
   return normalizedActual === normalizedExpected;
 };
 
-const executeCode = async (req, res) => {
-  const { code, problemId } = req.body;
-  
+const executeCode = async (code, input, problemId) => {
   if (!code) {
-    return res.status(400).json({ error: 'No code provided' });
+    throw new Error('No code provided');
   }
 
   try 
   {
+    console.log('Starting code execution...');
+    console.log('Input:', input);
+    
     // Create a temporary directory for code execution
     const tempDir = fs.mkdirSync(path.join(os.tmpdir(), 'code-execution-' + Date.now()));
+    console.log('Creating temporary directory:', tempDir);
     const filepath = path.join(tempDir, 'solution.c');
+    console.log('Writing code to file:', filepath);
     
     // Get test cases for the problem
     const testCasesQuery = 'SELECT * FROM test_cases WHERE problem_id = $1 ORDER BY id';
     const testCasesResult = await pool.query(testCasesQuery, [problemId]);
     const testCases = testCasesResult.rows;
+    console.log('Found test cases:', testCases.length);
 
     if (testCases.length === 0) {
-      return res.status(404).json({ error: 'No test cases found for this problem' });
+      throw new Error('No test cases found for this problem');
     }
 
     // Create test harness code
@@ -110,6 +114,9 @@ const executeCode = async (req, res) => {
         
         // Compare with expected output
         const char* expected = "${testCases[0].expected_output.replace(/"/g, '\\"')}";
+        printf("Expected output: %s\\n", expected);
+        printf("Actual output: %s\\n", buffer);
+        
         if (strcmp(buffer, expected) == 0) {
             printf("Test passed\\n");
         } else {
@@ -125,75 +132,96 @@ const executeCode = async (req, res) => {
     fs.writeFileSync(filepath, testHarness);
 
     // Compile the code
-    exec(`gcc ${filepath} -o ${path.join(tempDir, 'solution')}`, (error, stdout, stderr) => {
-      if (error) {
-        return res.status(400).json({ 
-          error: 'Compilation failed',
-          details: stderr 
-        });
-      }
-
-      // Execute the compiled program
-      exec(path.join(tempDir, 'solution'), (error, stdout, stderr) => {
-        // Clean up
-        fs.rmSync(tempDir, { recursive: true, force: true });
-
+    return new Promise((resolve, reject) => {
+      console.log('Compiling C code...');
+      exec(`gcc ${filepath} -o ${path.join(tempDir, 'solution')}`, (error, stdout, stderr) => {
         if (error) {
-          return res.status(400).json({ 
-            error: 'Runtime error',
+          console.error('Compilation error:', stderr);
+          fs.rmSync(tempDir, { recursive: true, force: true });
+          return reject({ 
+            error: 'Compilation failed',
             details: stderr 
           });
         }
+        console.log('Compilation successful');
 
-        // Parse test result
-        const lines = stdout.split('\n');
-        const passed = lines[0] === 'Test passed';
-        const details = lines.slice(1).join('\n');
+        // Execute the compiled program
+        console.log('Running compiled executable...');
+        exec(path.join(tempDir, 'solution'), (error, stdout, stderr) => {
+          // Clean up
+          fs.rmSync(tempDir, { recursive: true, force: true });
 
-        const testResults = [{
-          testCase: testCases[0].input,
-          passed: passed,
-          details: details || null,
-          input: testCases[0].input,
-          expectedOutput: testCases[0].expected_output,
-          actualOutput: passed ? testCases[0].expected_output : (details.includes('Got:') ? details.split('Got:')[1].trim() : 'No output')
-        }];
+          if (error) {
+            console.error('Runtime error:', stderr);
+            return reject({ 
+              error: 'Runtime error',
+              details: stderr 
+            });
+          }
 
-        // All tests passed if this one passed
-        const allPassed = passed;
+          console.log('Execution output:', stdout);
+          
+          // Parse test result
+          const lines = stdout.split('\n');
+          console.log('Parsed lines:', lines);
+          
+          const passed = lines.includes('Test passed');
+          console.log('Test passed:', passed);
+          
+          const details = lines.join('\n');
+          console.log('Test details:', details);
 
-        // If all tests passed and user is logged in, update progress
-        if (allPassed && req.user) {
-          pool.query(
-            `INSERT INTO user_progress (user_id, problem_id, status, submitted_solution)
-             VALUES ($1, $2, 'solved', $3)
-             ON CONFLICT (user_id, problem_id) 
-             DO UPDATE SET status = 'solved', submitted_solution = $3, updated_at = CURRENT_TIMESTAMP`,
-            [req.user.id, problemId, code]
-          ).catch(err => console.error('Error updating user progress:', err));
-        }
-
-        // In your codeExecutionController.js
-        res.json({
-          success: allPassed,       // Should be false if compilation failed
-          output: stdout || null,
-          error: stderr || null,
-          testCase: {               // Always include test case details
+          const testResults = [{
+            testCase: testCases[0].input,
+            passed: passed,
+            details: details || null,
             input: testCases[0].input,
-            expectedOutput: testCases[0].expected_output
-          },
-          passed: allPassed         // Explicit pass/fail status
+            expectedOutput: testCases[0].expected_output,
+            actualOutput: passed ? testCases[0].expected_output : (details.includes('Got:') ? details.split('Got:')[1].trim() : 'No output')
+          }];
+
+          // All tests passed if this one passed
+          const allPassed = passed;
+          console.log('All tests passed:', allPassed);
+
+          resolve({
+            success: allPassed,
+            output: stdout || null,
+            error: stderr || null,
+            testCase: {
+              input: testCases[0].input,
+              expectedOutput: testCases[0].expected_output
+            },
+            passed: allPassed
+          });
         });
       });
     });
   } 
   catch (error) {
     console.error('Error executing code:', error);
-    return res.status(500).json({ error: 'Internal server error' });
-    console.log('Mohit');
+    throw error;
+  }
+};
+
+// API endpoint for code execution
+const executeCodeEndpoint = async (req, res) => {
+  const { code, problemId } = req.body;
+  
+  if (!code) {
+    return res.status(400).json({ error: 'No code provided' });
+  }
+
+  try {
+    const result = await executeCode(code, null, problemId);
+    res.json(result);
+  } catch (error) {
+    console.error('Error executing code:', error);
+    res.status(500).json({ error: error.message || 'Internal server error' });
   }
 };
 
 module.exports = {
-  executeCode
+  executeCode,
+  executeCodeEndpoint
 }; 

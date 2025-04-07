@@ -236,14 +236,10 @@
 }
 
 .output-section {
-  height: 30%;
-  min-height: 200px;
-  max-height: 50%;
-  background-color: #1c1c1c;
-  border-top: 2px solid #333;
+  border-top: 1px solid #333;
+  height: 40%;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 .output-header {
@@ -263,14 +259,10 @@
 
 .output-content {
   flex: 1;
-  padding: 1rem;
+  padding: 15px;
   overflow-y: auto;
-  font-family: 'Courier New', monospace;
-  white-space: pre-wrap;
-  background-color: #1c1c1c;
-  color: #e0e0e0;
-  font-size: 0.95rem;
-  line-height: 1.5;
+  background: #1e1e1e;
+  color: #d4d4d4;
 }
 
 /* Discussion Section Styling */
@@ -505,7 +497,7 @@
 
 .status-badge.attempted::before {
   background-color: #FF9800;
-} 
+}
 
 .error-details {
   white-space: pre-wrap;
@@ -539,22 +531,6 @@
   color: #888;
   display: block;
   margin-bottom: 5px;
-}
-
-// Update the CSS with these styles
-.output-section {
-  border-top: 1px solid #333;
-  height: 40%;
-  display: flex;
-  flex-direction: column;
-}
-
-.output-content {
-  flex: 1;
-  padding: 15px;
-  overflow-y: auto;
-  background: #1e1e1e;
-  color: #d4d4d4;
 }
 
 .test-results {
