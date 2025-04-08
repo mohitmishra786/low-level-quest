@@ -75,12 +75,12 @@
   list-style-type: none;
 }
 
-.problem-description ol.problem-list > li {
+.problem-description ol.problem-list>li {
   counter-increment: item;
   position: relative;
 }
 
-.problem-description ol.problem-list > li:before {
+.problem-description ol.problem-list>li:before {
   content: counter(item) ".";
   position: absolute;
   left: -1.5em;
@@ -95,11 +95,11 @@
   list-style-type: none;
 }
 
-.problem-description ul.problem-list > li {
+.problem-description ul.problem-list>li {
   position: relative;
 }
 
-.problem-description ul.problem-list > li:before {
+.problem-description ul.problem-list>li:before {
   content: "•";
   position: absolute;
   left: -1.5em;
@@ -116,7 +116,8 @@
 
 /* Content area scrolling */
 .content-area {
-  height: calc(100% - 40px); /* 40px is the height of the tabs */
+  height: calc(100% - 40px);
+  /* 40px is the height of the tabs */
   overflow-y: auto;
   background-color: #121212;
   border-radius: 0 0 8px 8px;
@@ -208,7 +209,8 @@
 }
 
 .content-area {
-  height: calc(100% - 40px); /* 40px is the height of the tabs */
+  height: calc(100% - 40px);
+  /* 40px is the height of the tabs */
   overflow-y: auto;
   background-color: #121212;
   border-radius: 0 0 8px 8px;

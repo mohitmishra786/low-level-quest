@@ -15,7 +15,15 @@ function LoginPage() {
         username,
         password,
       });
+      console.log(
+        "Login successful, received token:",
+        response.data.token.substring(0, 10) + "..."
+      );
       localStorage.setItem("token", response.data.token);
+      console.log(
+        "Token stored in localStorage:",
+        localStorage.getItem("token").substring(0, 10) + "..."
+      );
       window.location.href = "/problems";
     } catch (error) {
       console.error("Login failed", error);

@@ -1,12 +1,12 @@
 // backend/controllers/codeExecutionController.js
-const { exec } = require('child_process');
-const fs = require('fs');
-const path = require('path');
-const os = require('os');
-const pool = require('../db');
+const { exec } = require("child_process");
+const fs = require("fs");
+const path = require("path");
+const os = require("os");
+const pool = require("../db");
 
 // Create a temporary directory for code execution
-const tempDir = path.join(os.tmpdir(), 'low-level-quest');
+const tempDir = path.join(os.tmpdir(), "low-level-quest");
 if (!fs.existsSync(tempDir)) {
   fs.mkdirSync(tempDir);
 }
@@ -16,11 +16,11 @@ const runCodeWithInput = (filepath, input) => {
   return new Promise((resolve, reject) => {
     const process = exec(`${filepath}.out`, (error, stdout, stderr) => {
       if (error) {
-        return reject({ error: 'Runtime error', output: stderr });
+        return reject({ error: "Runtime error", output: stderr });
       }
       resolve(stdout);
     });
-    
+
     // Send input to the process
     if (input) {
       process.stdin.write(input);
@@ -33,39 +33,41 @@ const runCodeWithInput = (filepath, input) => {
 const compareOutputs = (actual, expected) => {
   // Trim whitespace and normalize line endings
   const normalizeOutput = (output) => {
-    return output.trim().replace(/\r\n/g, '\n');
+    return output.trim().replace(/\r\n/g, "\n");
   };
-  
+
   const normalizedActual = normalizeOutput(actual);
   const normalizedExpected = normalizeOutput(expected);
-  
+
   return normalizedActual === normalizedExpected;
 };
 
 const executeCode = async (code, input, problemId) => {
   if (!code) {
-    throw new Error('No code provided');
+    throw new Error("No code provided");
   }
 
-  try 
-  {
-    console.log('Starting code execution...');
-    console.log('Input:', input);
-    
+  try {
+    console.log("Starting code execution...");
+    console.log("Input:", input);
+
     // Create a temporary directory for code execution
-    const tempDir = fs.mkdirSync(path.join(os.tmpdir(), 'code-execution-' + Date.now()));
-    console.log('Creating temporary directory:', tempDir);
-    const filepath = path.join(tempDir, 'solution.c');
-    console.log('Writing code to file:', filepath);
-    
+    const tempDir = fs.mkdirSync(
+      path.join(os.tmpdir(), "code-execution-" + Date.now())
+    );
+    console.log("Creating temporary directory:", tempDir);
+    const filepath = path.join(tempDir, "solution.c");
+    console.log("Writing code to file:", filepath);
+
     // Get test cases for the problem
-    const testCasesQuery = 'SELECT * FROM test_cases WHERE problem_id = $1 ORDER BY id';
+    const testCasesQuery =
+      "SELECT * FROM test_cases WHERE problem_id = $1 ORDER BY id";
     const testCasesResult = await pool.query(testCasesQuery, [problemId]);
     const testCases = testCasesResult.rows;
-    console.log('Found test cases:', testCases.length);
+    console.log("Found test cases:", testCases.length);
 
     if (testCases.length === 0) {
-      throw new Error('No test cases found for this problem');
+      throw new Error("No test cases found for this problem");
     }
 
     // Create test harness code
@@ -113,7 +115,10 @@ const executeCode = async (code, input, problemId) => {
         }
         
         // Compare with expected output
-        const char* expected = "${testCases[0].expected_output.replace(/"/g, '\\"')}";
+        const char* expected = "${testCases[0].expected_output.replace(
+          /"/g,
+          '\\"'
+        )}";
         printf("Expected output: %s\\n", expected);
         printf("Actual output: %s\\n", buffer);
         
@@ -133,90 +138,108 @@ const executeCode = async (code, input, problemId) => {
 
     // Compile the code
     return new Promise((resolve, reject) => {
-      console.log('Compiling C code...');
-      exec(`gcc ${filepath} -o ${path.join(tempDir, 'solution')}`, (error, stdout, stderr) => {
-        if (error) {
-          console.error('Compilation error:', stderr);
-          fs.rmSync(tempDir, { recursive: true, force: true });
-          return reject({ 
-            error: 'Compilation failed',
-            details: stderr 
-          });
-        }
-        console.log('Compilation successful');
-
-        // Execute the compiled program
-        console.log('Running compiled executable...');
-        exec(path.join(tempDir, 'solution'), (error, stdout, stderr) => {
-          // Clean up
-          fs.rmSync(tempDir, { recursive: true, force: true });
-
+      console.log("Compiling C code...");
+      exec(
+        `gcc ${filepath} -o ${path.join(tempDir, "solution")}`,
+        (error, stdout, stderr) => {
           if (error) {
-            console.error('Runtime error:', stderr);
-            return reject({ 
-              error: 'Runtime error',
-              details: stderr 
+            console.error("Compilation error:", stderr);
+            fs.rmSync(tempDir, { recursive: true, force: true });
+            return reject({
+              error: "Compilation failed",
+              details: stderr,
             });
           }
+          console.log("Compilation successful");
 
-          console.log('Execution output:', stdout);
-          
-          // Parse test result
-          const lines = stdout.split('\n');
-          console.log('Parsed lines:', lines);
-          
-          // Check if test passed by looking for "Test passed" in the output
-          const passed = lines.includes('Test passed');
-          console.log('Test passed:', passed);
+          // Execute the compiled program
+          console.log("Running compiled executable...");
+          exec(path.join(tempDir, "solution"), (error, stdout, stderr) => {
+            // Clean up
+            fs.rmSync(tempDir, { recursive: true, force: true });
 
-          // Extract actual output - the actual user's program output
-          let actualOutput = '';
-          if (stdout.includes('Actual output:')) {
-            actualOutput = stdout.split('Actual output:')[1].split('\n')[0].trim();
-          } else {
-            // If we can't find the actual output marker, just use the first line
-            actualOutput = lines[0].trim();
-          }
-          console.log('Extracted actual output:', actualOutput);
-          
-          // Compare actual output with expected output
-          const expectedOutput = testCases[0].expected_output.trim();
-          const outputsMatch = actualOutput === expectedOutput;
-          console.log('Outputs match:', outputsMatch, 'Actual:', actualOutput, 'Expected:', expectedOutput);
+            if (error) {
+              console.error("Runtime error:", stderr);
+              return reject({
+                error: "Runtime error",
+                details: stderr,
+              });
+            }
 
-          const details = lines.join('\n');
-          console.log('Test details:', details);
+            console.log("Execution output:", stdout);
 
-          const testResults = [{
-            testCase: testCases[0].input,
-            passed: passed,
-            details: details || null,
-            input: testCases[0].input,
-            expectedOutput: testCases[0].expected_output,
-            actualOutput: passed ? testCases[0].expected_output : (details.includes('Got:') ? details.split('Got:')[1].trim() : actualOutput),
-            description: testCases[0].description
-          }];
+            // Parse test result
+            const lines = stdout.split("\n");
+            console.log("Parsed lines:", lines);
 
-          // All tests passed if this one passed
-          const allPassed = passed;
-          console.log('All tests passed:', allPassed);
+            // Check if test passed by looking for "Test passed" in the output
+            const passed = lines.includes("Test passed");
+            console.log("Test passed:", passed);
 
-          resolve({
-            success: true, // Set success to true if the execution completed without errors
-            output: actualOutput || null,
-            error: stderr || null,
-            testCase: {
-              input: testCases[0].input,
-              expectedOutput: testCases[0].expected_output
-            },
-            passed: outputsMatch // Set passed based on if the output matches expected
+            // Extract actual output - the actual user's program output
+            let actualOutput = "";
+            if (stdout.includes("Actual output:")) {
+              actualOutput = stdout
+                .split("Actual output:")[1]
+                .split("\n")[0]
+                .trim();
+            } else {
+              // If we can't find the actual output marker, just use the first line
+              actualOutput = lines[0].trim();
+            }
+            console.log("Extracted actual output:", actualOutput);
+
+            // Compare actual output with expected output
+            const expectedOutput = testCases[0].expected_output.trim();
+            const outputsMatch = actualOutput === expectedOutput;
+            console.log(
+              "Outputs match:",
+              outputsMatch,
+              "Actual:",
+              actualOutput,
+              "Expected:",
+              expectedOutput
+            );
+
+            const details = lines.join("\n");
+            console.log("Test details:", details);
+
+            const testResults = [
+              {
+                testCase: testCases[0].input,
+                passed: passed,
+                details: details || null,
+                input: testCases[0].input,
+                expectedOutput: testCases[0].expected_output,
+                actualOutput: passed
+                  ? testCases[0].expected_output
+                  : details.includes("Got:")
+                  ? details.split("Got:")[1].trim()
+                  : actualOutput,
+                description: testCases[0].description,
+              },
+            ];
+
+            // All tests passed if this one passed
+            const allPassed = passed;
+            console.log("All tests passed:", allPassed);
+
+            resolve({
+              success: true, // Set success to true if the execution completed without errors
+              output: actualOutput || null,
+              error: stderr || null,
+              testCase: {
+                input: testCases[0].input,
+                expectedOutput: testCases[0].expected_output,
+              },
+              passed: outputsMatch, // Set passed based on if the output matches expected
+            });
           });
-        });
-      });
+        }
+      );
     });
-  } 
-  catch (error) {
-    console.error('Error executing code:', error);
+  } catch (error) {
+    console.error("Error executing code:", error);
     throw error;
   }
 };
@@ -224,32 +247,32 @@ const executeCode = async (code, input, problemId) => {
 // API endpoint for code execution
 const executeCodeEndpoint = async (req, res) => {
   const { code, input, problemId } = req.body;
-  
-  console.log('executeCodeEndpoint called with:', { 
-    codeLength: code?.length, 
+
+  console.log("executeCodeEndpoint called with:", {
+    codeLength: code?.length,
     inputLength: input?.length,
-    problemId 
+    problemId,
   });
-  
+
   if (!code) {
-    return res.status(400).json({ error: 'No code provided' });
+    return res.status(400).json({ error: "No code provided" });
   }
 
   try {
     if (!problemId) {
-      console.log('WARNING: No problemId provided for executeCodeEndpoint');
+      console.log("WARNING: No problemId provided for executeCodeEndpoint");
     }
-    
+
     const result = await executeCode(code, input, problemId);
-    console.log('executeCodeEndpoint result:', result);
+    console.log("executeCodeEndpoint result:", result);
     res.json(result);
   } catch (error) {
-    console.error('Error executing code:', error);
-    res.status(500).json({ error: error.message || 'Internal server error' });
+    console.error("Error executing code:", error);
+    res.status(500).json({ error: error.message || "Internal server error" });
   }
 };
 
 module.exports = {
   executeCode,
-  executeCodeEndpoint
-}; 
+  executeCodeEndpoint,
+};

@@ -11,15 +11,24 @@ const api = axios.create({
 // Request interceptor for logging
 api.interceptors.request.use(
   (config) => {
-    console.log(`Making ${config.method.toUpperCase()} request to: ${config.url}`);
+    console.log(
+      `Making ${config.method.toUpperCase()} request to: ${config.url}`
+    );
     const token = localStorage.getItem("token");
     if (token) {
+      console.log(`Found token in localStorage: ${token.substring(0, 10)}...`);
       config.headers.Authorization = `Bearer ${token}`;
+      console.log(
+        "Set Authorization header:",
+        config.headers.Authorization.substring(0, 15) + "..."
+      );
+    } else {
+      console.log("No token found in localStorage");
     }
     return config;
   },
   (error) => {
-    console.error('Request error:', error);
+    console.error("Request error:", error);
     return Promise.reject(error);
   }
 );
@@ -31,7 +40,7 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.error('Response error:', error.response?.data || error.message);
+    console.error("Response error:", error.response?.data || error.message);
     return Promise.reject(error);
   }
 );

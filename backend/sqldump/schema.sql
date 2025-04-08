@@ -88,6 +88,7 @@ CREATE TABLE IF NOT EXISTS user_problem_status (
     problem_id INTEGER REFERENCES problems(id) ON DELETE CASCADE,
     status VARCHAR(20) NOT NULL CHECK (status IN ('attempted', 'solved')),
     attempts INTEGER DEFAULT 0,
+    run_code_count INTEGER DEFAULT 0,
     last_attempted_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     solved_at TIMESTAMP WITH TIME ZONE,
     UNIQUE(user_id, problem_id)
