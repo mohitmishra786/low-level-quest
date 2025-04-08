@@ -55,19 +55,22 @@ function StatsCircle({ stats }) {
         <div className="stat-row easy">
           <span>Easy</span>
           <span>
-            {formatNumber(stats?.easy?.solved)}/{formatNumber(stats?.easy?.total)}
+            {formatNumber(stats?.easy?.solved)}/
+            {formatNumber(stats?.easy?.total)}
           </span>
         </div>
         <div className="stat-row medium">
           <span>Medium</span>
           <span>
-            {formatNumber(stats?.medium?.solved)}/{formatNumber(stats?.medium?.total)}
+            {formatNumber(stats?.medium?.solved)}/
+            {formatNumber(stats?.medium?.total)}
           </span>
         </div>
         <div className="stat-row hard">
           <span>Hard</span>
           <span>
-            {formatNumber(stats?.hard?.solved)}/{formatNumber(stats?.hard?.total)}
+            {formatNumber(stats?.hard?.solved)}/
+            {formatNumber(stats?.hard?.total)}
           </span>
         </div>
       </div>

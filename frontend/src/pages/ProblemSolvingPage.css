@@ -517,7 +517,7 @@
   border-left: 4px solid #44ff44;
 }
 
-.test-expected pre, 
+.test-expected pre,
 .test-actual pre {
   background: #1e1e1e;
   padding: 10px;
@@ -582,7 +582,8 @@
   grid-column: span 2;
 }
 
-.test-expected, .test-actual {
+.test-expected,
+.test-actual {
   background: #1e1e1e;
   padding: 10px;
   border-radius: 4px;

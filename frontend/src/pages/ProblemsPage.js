@@ -17,30 +17,55 @@ function ProblemsPage() {
   });
 
   useEffect(() => {
-    fetchProblems();
-  }, [activeFilter]);
+    const loadData = async () => {
+      console.log("Loading data...");
+      try {
+        console.log("Fetching problems...");
+        await fetchProblems();
+        console.log("Fetching user stats...");
+        await fetchUserStats();
+        console.log("Data loading complete");
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    };
+
+    loadData();
+  }, []);
 
   const fetchProblems = async () => {
     try {
       const response = await API.get("/api/problems");
       console.log("Problems data:", response.data);
       setProblems(response.data);
-      
-      // Update stats based on actual data
+
+      // Only set total counts, don't override solved counts
       const total = response.data.length;
-      const easy = response.data.filter(p => p.difficulty === 'Easy').length;
-      const medium = response.data.filter(p => p.difficulty === 'Medium').length;
-      const hard = response.data.filter(p => p.difficulty === 'Hard').length;
-      
-      setUserStats({
-        solved: 0,
+      const easy = response.data.filter((p) => p.difficulty === "Easy").length;
+      const medium = response.data.filter(
+        (p) => p.difficulty === "Medium"
+      ).length;
+      const hard = response.data.filter((p) => p.difficulty === "Hard").length;
+
+      setUserStats((prevStats) => ({
+        ...prevStats,
         total: total,
-        easy: { solved: 0, total: easy },
-        medium: { solved: 0, total: medium },
-        hard: { solved: 0, total: hard },
-      });
+        easy: { ...prevStats.easy, total: easy },
+        medium: { ...prevStats.medium, total: medium },
+        hard: { ...prevStats.hard, total: hard },
+      }));
     } catch (error) {
       console.error("Failed to fetch problems:", error);
+    }
+  };
+
+  const fetchUserStats = async () => {
+    try {
+      const response = await API.get("/api/problems/user/stats");
+      console.log("User stats:", response.data);
+      setUserStats(response.data);
+    } catch (error) {
+      console.error("Failed to fetch user stats:", error);
     }
   };
 
@@ -55,13 +80,30 @@ function ProblemsPage() {
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'solved':
+      case "solved":
         return <div className="status-icon solved" title="Solved" />;
-      case 'attempted':
+      case "attempted":
         return <div className="status-icon attempted" title="Attempted" />;
       default:
         return <div className="status-icon" title="Not attempted" />;
     }
+  };
+
+  const handleFilterChange = (filter) => {
+    console.log("Changing filter to:", filter);
+    setActiveFilter(filter);
+
+    // Reload data with new filter
+    const loadData = async () => {
+      try {
+        await fetchProblems();
+        await fetchUserStats();
+      } catch (error) {
+        console.error("Error loading data with new filter:", error);
+      }
+    };
+
+    loadData();
   };
 
   return (
@@ -88,19 +130,23 @@ function ProblemsPage() {
           <div className="filter-buttons">
             <button
               className={`filter-btn ${activeFilter === "all" ? "active" : ""}`}
-              onClick={() => setActiveFilter("all")}
+              onClick={() => handleFilterChange("all")}
             >
               🌐 All Problems
             </button>
             <button
-              className={`filter-btn ${activeFilter === "top10" ? "active" : ""}`}
-              onClick={() => setActiveFilter("top10")}
+              className={`filter-btn ${
+                activeFilter === "top10" ? "active" : ""
+              }`}
+              onClick={() => handleFilterChange("top10")}
             >
               ⚡ Top 10 Problems
             </button>
             <button
-              className={`filter-btn ${activeFilter === "top25" ? "active" : ""}`}
-              onClick={() => setActiveFilter("top25")}
+              className={`filter-btn ${
+                activeFilter === "top25" ? "active" : ""
+              }`}
+              onClick={() => handleFilterChange("top25")}
             >
               🌟 Top 25 Problems
             </button>
@@ -124,9 +170,7 @@ function ProblemsPage() {
               <tbody>
                 {problems.map((problem) => (
                   <tr key={problem.id}>
-                    <td>
-                      {getStatusIcon(problem.status)}
-                    </td>
+                    <td>{getStatusIcon(problem.status)}</td>
                     <td>
                       <Link
                         to={`/problem/${problem.id}`}
@@ -137,7 +181,7 @@ function ProblemsPage() {
                     </td>
                     <td>
                       <span className="category-tag">
-                        {problem.category || 'Uncategorized'}
+                        {problem.category || "Uncategorized"}
                       </span>
                     </td>
                     <td>
@@ -146,7 +190,9 @@ function ProblemsPage() {
                       </span>
                     </td>
                     <td>
-                      {problem.attempts > 0 ? problem.attempts : '-'}
+                      {problem.attempts && problem.attempts > 0
+                        ? problem.attempts
+                        : "-"}
                     </td>
                     <td className="created-date">
                       {new Date(problem.created_at).toLocaleDateString()}
