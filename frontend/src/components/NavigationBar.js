@@ -6,6 +6,7 @@ function NavigationBar() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    console.log("Logging out");
     localStorage.removeItem("token");
     navigate("/login");
   };
