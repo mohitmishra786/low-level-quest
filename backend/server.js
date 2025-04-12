@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const problemRoutes = require("./routes/problemRoutes");
 const authRoutes = require("./routes/authRoutes");
 const codeExecutionRoutes = require("./routes/codeExecutionRoutes");
+//const problemsRoutes = require("./routes/problemsRoutes");
 
 // Load environment variables
 dotenv.config();
@@ -41,6 +42,7 @@ app.use((req, res, next) => {
 app.use("/api/problems", problemRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/execute", codeExecutionRoutes);
+//app.use("/api", problemsRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

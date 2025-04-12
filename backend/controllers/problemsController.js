@@ -11,8 +11,13 @@ exports.getProblems = async (req, res) => {
       req.user ? req.user.id : "unauthenticated"
     );
 
+    // Make sure req.user exists before accessing req.user.id
+    if (!req.user) {
+      return res.status(401).json({ error: "Authentication required" });
+    }
+
     // Use explicit user ID for testing (user 6) or user from token if available
-    const userId = req.user?.id || 6; // Forcing user ID 6 for testing
+    const userId = req.user.id; // Forcing user ID 6 for testing
     console.log("Using user ID for problems:", userId);
 
     const query = `
@@ -123,8 +128,13 @@ exports.getUserStats = async (req, res) => {
       req.user ? req.user.id : "unauthenticated"
     );
 
+    // Make sure req.user exists before accessing req.user.id
+    if (!req.user) {
+      return res.status(401).json({ error: "Authentication required" });
+    }
+
     // Use an explicit user ID for testing (user 6) or user from token if available
-    const userId = req.user?.id || 6; // Forcing user ID 6 for testing
+    const userId = req.user.id; // Forcing user ID 6 for testing
     console.log("Using user ID for stats:", userId);
 
     // Get total problems count by difficulty

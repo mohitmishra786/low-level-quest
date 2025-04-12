@@ -3,7 +3,7 @@ const router = express.Router();
 const problemsController = require("../controllers/problemsController");
 const authMiddleware = require("../middleware/auth");
 
-// Public routes
+// Debug route
 router.get("/debug/auth", (req, res) => {
   const authHeader = req.header("Authorization");
   res.json({
@@ -16,26 +16,22 @@ router.get("/debug/auth", (req, res) => {
   });
 });
 
-router.get("/user/stats", problemsController.getUserStats);
-router.get(
-  "/discussions/:discussionId/comments",
-  problemsController.getComments
-);
-router.get("/", problemsController.getProblems);
+// Apply auth middleware to these routes
+router.get("/user/stats", authMiddleware, problemsController.getUserStats);
+router.get("/", authMiddleware, problemsController.getProblems);
+router.get("/:id", authMiddleware, problemsController.getProblemById);
+
+// These can remain public if needed
 router.get("/:id/hints", problemsController.getHints);
 router.get("/:id/discussions", problemsController.getDiscussions);
-router.get("/:id", problemsController.getProblemById);
+router.get("/discussions/:discussionId/comments", problemsController.getComments);
 
 // Protected routes
-router.use(authMiddleware);
-router.post("/:id/status", problemsController.updateProblemStatus);
-router.post("/:id/run", problemsController.runCode);
-router.post("/:id/submit", problemsController.submitSolution);
-router.post("/:id/hints", problemsController.createHint);
-router.post("/:id/discussions", problemsController.createDiscussion);
-router.post(
-  "/discussions/:discussionId/comments",
-  problemsController.createComment
-);
+router.post("/:id/status", authMiddleware, problemsController.updateProblemStatus);
+router.post("/:id/run", authMiddleware, problemsController.runCode);
+router.post("/:id/submit", authMiddleware, problemsController.submitSolution);
+router.post("/:id/hints", authMiddleware, problemsController.createHint);
+router.post("/:id/discussions", authMiddleware, problemsController.createDiscussion);
+router.post("/discussions/:discussionId/comments", authMiddleware, problemsController.createComment);
 
 module.exports = router;
