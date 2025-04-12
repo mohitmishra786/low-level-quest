@@ -463,7 +463,7 @@ function ProblemSolvingPage() {
         </div>
       </div>
 
-      <div className="main-content">
+      <div className="problem-solving-content">
         <div className="left-panel">
           <div className="tabs">
             <button
@@ -487,13 +487,15 @@ function ProblemSolvingPage() {
           </div>
 
           <div className="content-area">
-            {activeTab === "description" && (
-              <ProblemDescription description={problem.description} />
-            )}
+            <div style={{ width: '100%', minWidth: 0 }}>
+              {activeTab === "description" && (
+                <ProblemDescription description={problem.description} problem={problem} />
+              )}
 
-            {activeTab === "discussion" && <DiscussionSection problemId={id} />}
+              {activeTab === "discussion" && <DiscussionSection problemId={id} />}
 
-            {activeTab === "hints" && <HintsSection problemId={id} />}
+              {activeTab === "hints" && <HintsSection problemId={id} />}
+            </div>
           </div>
         </div>
 

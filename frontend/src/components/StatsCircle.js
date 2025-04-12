@@ -23,7 +23,7 @@ function StatsCircle({ stats }) {
 
   return (
     <div className="stats-circle-container">
-      <h3 className="stats-header">Your Progress</h3>
+      <h3 className="stats-header">Your Stats</h3>
       <div className="stats-circle">
         <svg width="120" height="120" viewBox="0 0 100 100">
           <circle

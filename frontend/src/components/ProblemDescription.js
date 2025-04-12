@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
+import './ProblemDescription.css';
+import parse from 'html-react-parser';
 
 /**
  * Component to render problem descriptions with proper formatting
  * This handles code blocks, lists, and basic formatting
  */
-const ProblemDescription = ({ description }) => {
+const ProblemDescription = ({ description, problem }) => {
+  const [showHint, setShowHint] = useState(false);
+  
   if (!description) return null;
+
+  const toggleHint = () => {
+    setShowHint(!showHint);
+  };
 
   // First unescape the newlines and other special characters
   const unescapeString = (str) => {
@@ -252,7 +260,30 @@ const ProblemDescription = ({ description }) => {
   };
 
   return (
-    <div className="problem-description">{renderFormattedDescription()}</div>
+    <div className="problem-description-container">
+      {problem && problem.title && (
+        <h2 className="problem-title">{problem.title}</h2>
+      )}
+      <div className="problem-description">
+        {renderFormattedDescription()}
+      </div>
+
+      {problem && problem.hint && (
+        <div className="hint-section">
+          <div className="hint-header" onClick={toggleHint}>
+            <h3 className="hint-title">Hint</h3>
+            <button className="hint-toggle">
+              {showHint ? 'Hide Hint' : 'Show Hint'}
+            </button>
+          </div>
+          {showHint && (
+            <div className="hint-content">
+              {parse(problem.hint)}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   );
 };
 
