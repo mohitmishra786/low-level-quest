@@ -622,12 +622,8 @@ INSERT INTO public.categories VALUES (3, 'Reverse Engineering', 'Challenges invo
 INSERT INTO public.categories VALUES (4, 'Binary Exploitation', 'Problems related to security vulnerabilities and exploit development', '2025-04-06 19:37:05.626892+05:30');
 INSERT INTO public.categories VALUES (5, 'DevOps', 'Tasks involving system administration, automation, and deployment', '2025-04-06 19:37:05.626892+05:30');
 INSERT INTO public.categories VALUES (6, 'Machine Learning', 'Problems related to ML algorithms, neural networks, and data processing', '2025-04-06 19:37:05.626892+05:30');
-INSERT INTO public.categories VALUES (7, 'Operating Systems', 'Problems related to OS concepts, system calls, and kernel programming', '2025-04-06 21:55:47.720608+05:30');
-INSERT INTO public.categories VALUES (8, 'Computer Architecture', 'Problems focusing on CPU architecture, memory hierarchy, and assembly language', '2025-04-06 21:55:47.720608+05:30');
-INSERT INTO public.categories VALUES (9, 'Reverse Engineering', 'Challenges involving binary analysis and understanding compiled code', '2025-04-06 21:55:47.720608+05:30');
-INSERT INTO public.categories VALUES (10, 'Binary Exploitation', 'Problems related to security vulnerabilities and exploit development', '2025-04-06 21:55:47.720608+05:30');
-INSERT INTO public.categories VALUES (11, 'DevOps', 'Tasks involving system administration, automation, and deployment', '2025-04-06 21:55:47.720608+05:30');
-INSERT INTO public.categories VALUES (12, 'Machine Learning', 'Problems related to ML algorithms, neural networks, and data processing', '2025-04-06 21:55:47.720608+05:30');
+INSERT INTO public.categories VALUES (13, 'OOPs', 'Problems related to Object-Oriented Programming concepts, design patterns, and SOLID principles', '2025-04-12 15:09:23.467361+05:30');
+INSERT INTO public.categories VALUES (14, 'Angular', 'Problems focusing on Angular framework, components, services, and state management', '2025-04-12 15:09:23.467361+05:30');
 
 
 --
@@ -696,6 +692,26 @@ void my_free(void* ptr) {
         allocated = 0;
     }
 }', NULL, '2025-04-06 19:47:07.847756+05:30', '2025-04-06 19:47:07.847756+05:30');
+INSERT INTO public.problems VALUES (24, 'Component Basics and Data Binding', 'Learn how to create and structure Angular components. Master data binding techniques including property binding, event binding, and two-way binding for dynamic component interactions.', 'Hard', 14, NULL, NULL, NULL, '2025-04-12 15:25:31.311147+05:30', '2025-04-12 15:25:31.311147+05:30');
+INSERT INTO public.problems VALUES (14, 'Singleton Pattern: Thread-Safe Implementation', 'Implement a thread-safe Singleton pattern in C++ that manages a global configuration system. Requirements:\n\n1. Thread-safe instance creation using double-checked locking\n2. Configuration management with key-value pairs\n3. Lazy initialization of the configuration\n4. Proper memory management and cleanup\n5. Prevention of copying and assignment\n6. Error handling for invalid operations\n\nThe Singleton should provide methods to:\n- Get/Set configuration values\n- Reset configuration to defaults\n- Check if a configuration key exists\n- Clear all configurations\n\nExample Usage:\nConfigSingleton::getInstance()->setValue("timeout", 30);\nint timeout = ConfigSingleton::getInstance()->getValue("timeout");', 'Hard', 13, 'class ConfigSingleton {\nprivate:\n    static ConfigSingleton* instance;\n    static std::mutex mutex;\n    std::unordered_map<std::string, int> config;\n    \n    ConfigSingleton() = default;  // Private constructor\n    ~ConfigSingleton() = default;\n    \n public:\n    static ConfigSingleton* getInstance();\n    void setValue(const std::string& key, int value);\n    int getValue(const std::string& key);\n    bool hasKey(const std::string& key);\n    void reset();\n    void clear();\n};', NULL, NULL, '2025-04-12 15:25:31.311147+05:30', '2025-04-12 15:25:31.311147+05:30');
+INSERT INTO public.problems VALUES (25, 'Services and Dependency Injection', 'Understand Angular services and dependency injection system. Learn how to create, provide, and consume services across components for better code organization and reusability.', 'Medium', 14, NULL, NULL, NULL, '2025-04-12 15:25:31.311147+05:30', '2025-04-12 15:25:31.311147+05:30');
+INSERT INTO public.problems VALUES (26, 'Template Syntax and Directives', 'Master Angular template syntax and built-in directives. Learn how to use structural directives like *ngIf and *ngFor, and attribute directives for dynamic template rendering.', 'Easy', 14, NULL, NULL, NULL, '2025-04-12 15:25:31.311147+05:30', '2025-04-12 15:25:31.311147+05:30');
+INSERT INTO public.problems VALUES (27, 'Reactive Forms and Validation', 'Implement complex form handling using Angular reactive forms. Learn form validation, custom validators, and how to handle form submission with proper error handling.', 'Medium', 14, NULL, NULL, NULL, '2025-04-12 15:25:31.311147+05:30', '2025-04-12 15:25:31.311147+05:30');
+INSERT INTO public.problems VALUES (28, 'HTTP Client and API Integration', 'Learn how to make HTTP requests using Angular HttpClient. Master API integration, error handling, and implementing proper data transformation for backend communication.', 'Medium', 14, NULL, NULL, NULL, '2025-04-12 15:25:31.311147+05:30', '2025-04-12 15:25:31.311147+05:30');
+INSERT INTO public.problems VALUES (29, 'Advanced Routing and Navigation', 'Implement complex routing scenarios with guards and resolvers. Learn lazy loading, route parameters, and how to handle navigation events for better application performance.', 'Hard', 14, NULL, NULL, NULL, '2025-04-12 15:25:31.311147+05:30', '2025-04-12 15:25:31.311147+05:30');
+INSERT INTO public.problems VALUES (30, 'Custom Pipes and Data Transformation', 'Create custom pipes for data transformation and formatting. Learn how to implement pure and impure pipes, and handle async data streams with the async pipe.', 'Easy', 14, NULL, NULL, NULL, '2025-04-12 15:25:31.311147+05:30', '2025-04-12 15:25:31.311147+05:30');
+INSERT INTO public.problems VALUES (31, 'Component Styling and View Encapsulation', 'Master component styling techniques and view encapsulation. Learn how to use component-specific styles, global styles, and implement dynamic styling using ngClass and ngStyle.', 'Easy', 14, NULL, NULL, NULL, '2025-04-12 15:25:31.311147+05:30', '2025-04-12 15:25:31.311147+05:30');
+INSERT INTO public.problems VALUES (32, 'Component Lifecycle and Change Detection', 'Understand component lifecycle hooks and change detection mechanism. Learn how to optimize performance by properly implementing lifecycle hooks and managing change detection.', 'Easy', 14, NULL, NULL, NULL, '2025-04-12 15:25:31.311147+05:30', '2025-04-12 15:25:31.311147+05:30');
+INSERT INTO public.problems VALUES (33, 'Testing Angular Applications', 'Learn how to write unit tests and e2e tests for Angular applications. Master testing utilities, mocking dependencies, and implementing test coverage for components and services.', 'Easy', 14, NULL, NULL, NULL, '2025-04-12 15:25:31.311147+05:30', '2025-04-12 15:25:31.311147+05:30');
+INSERT INTO public.problems VALUES (15, 'Classes and Objects', 'Learn the fundamentals of object-oriented programming with classes and objects. Understand encapsulation, constructors, and how to create reusable code structures.', 'Medium', 13, NULL, NULL, NULL, '2025-04-12 15:25:31.311147+05:30', '2025-04-12 15:25:31.311147+05:30');
+INSERT INTO public.problems VALUES (16, 'Inheritance and Polymorphism', 'Master inheritance hierarchies and polymorphic behavior in OOP. Learn how to create derived classes, override methods, and implement runtime polymorphism for flexible code design.', 'Easy', 13, NULL, NULL, NULL, '2025-04-12 15:25:31.311147+05:30', '2025-04-12 15:25:31.311147+05:30');
+INSERT INTO public.problems VALUES (19, 'Method Overloading and Overriding', 'Learn the differences between method overloading and overriding. Understand how to implement both techniques effectively for creating flexible and maintainable code.', 'Medium', 13, NULL, NULL, NULL, '2025-04-12 15:25:31.311147+05:30', '2025-04-12 15:25:31.311147+05:30');
+INSERT INTO public.problems VALUES (22, 'Design Patterns Implementation', 'Learn and implement common design patterns in OOP. Understand creational, structural, and behavioral patterns for creating maintainable and scalable applications.', 'Easy', 13, NULL, NULL, NULL, '2025-04-12 15:25:31.311147+05:30', '2025-04-12 15:25:31.311147+05:30');
+INSERT INTO public.problems VALUES (17, 'Abstract Classes and Interfaces', 'Understand the difference between abstract classes and interfaces. Learn how to define abstract methods, implement interfaces, and create flexible class hierarchies.', 'Medium', 13, NULL, NULL, NULL, '2025-04-12 15:25:31.311147+05:30', '2025-04-12 15:25:31.311147+05:30');
+INSERT INTO public.problems VALUES (18, 'Encapsulation and Access Control', 'Master encapsulation principles and access modifiers. Learn how to protect class members, implement getters and setters, and maintain data integrity in your classes.', 'Hard', 13, NULL, NULL, NULL, '2025-04-12 15:25:31.311147+05:30', '2025-04-12 15:25:31.311147+05:30');
+INSERT INTO public.problems VALUES (20, 'Static Members and Constants', 'Understand static class members, constants, and their usage in OOP. Learn how to implement class-level variables and methods, and maintain global state effectively.', 'Medium', 13, NULL, NULL, NULL, '2025-04-12 15:25:31.311147+05:30', '2025-04-12 15:25:31.311147+05:30');
+INSERT INTO public.problems VALUES (21, 'Exception Handling and Error Management', 'Master exception handling in OOP. Learn how to create custom exceptions, implement try-catch blocks, and handle errors gracefully in your applications.', 'Medium', 13, NULL, NULL, NULL, '2025-04-12 15:25:31.311147+05:30', '2025-04-12 15:25:31.311147+05:30');
+INSERT INTO public.problems VALUES (23, 'Advanced OOP Concepts', 'Explore advanced OOP concepts like composition, aggregation, and dependency injection. Learn how to implement complex object relationships and create flexible software architectures.', 'Easy', 13, NULL, NULL, NULL, '2025-04-12 15:25:31.311147+05:30', '2025-04-12 15:25:31.311147+05:30');
 
 
 --
@@ -707,6 +723,7 @@ INSERT INTO public.users VALUES (3, 'abc', 'immadmoht@gmail.com', '$2b$10$2yULpF
 INSERT INTO public.users VALUES (4, 'mohit', 'abc@gmail.com', '$2b$10$TEvfjY2Aek5rfcZ.B8jQC.4VUvWTwc17L.1jZEcIMsgahbSBIp8I6', '2025-04-06 19:59:02.981248+05:30', '2025-04-06 19:59:02.981248+05:30');
 INSERT INTO public.users VALUES (5, 'testuser', 'test@example.com', '$2b$10$6jM7.1R8dVZTcVBCRZg/QOwI9U3jqA.gx2rmY.oqHX9ENCyDMArTi', '2025-04-06 22:06:39.50382+05:30', '2025-04-06 22:06:39.50382+05:30');
 INSERT INTO public.users VALUES (6, 'mahi', 'uma@gmail.com', '$2b$10$uJws9.CXbncy8PgDlCYwjeMDGM.rtK3kAR1NE1mB34/Yoij6gDBXC', '2025-04-06 22:24:39.258821+05:30', '2025-04-06 22:24:39.258821+05:30');
+INSERT INTO public.users VALUES (7, 'abcd', 'abcd@gmail.com', '$2b$10$bGiRH8r0hCwVJtJCvLf0jOvGBmWi/HTcTj/qt2VE.nsVTC2Db0wRK', '2025-04-10 23:03:37.099585+05:30', '2025-04-10 23:03:37.099585+05:30');
 
 
 --
@@ -726,6 +743,7 @@ INSERT INTO public.discussions VALUES (10, 4, 1, 'lalal', 'Laval', '2025-04-06 2
 INSERT INTO public.discussions VALUES (11, 6, 1, 'my first time', 'I learned memory in java', '2025-04-06 22:25:28.054283+05:30', '2025-04-06 22:25:28.054283+05:30');
 INSERT INTO public.discussions VALUES (12, 4, 1, 'hello', 'hello', '2025-04-06 23:04:25.647283+05:30', '2025-04-06 23:04:25.647283+05:30');
 INSERT INTO public.discussions VALUES (13, 4, 1, 'a', 'a', '2025-04-06 23:20:37.510236+05:30', '2025-04-06 23:20:37.510236+05:30');
+INSERT INTO public.discussions VALUES (14, 6, 1, 'what', 'what to do', '2025-04-12 14:41:43.871756+05:30', '2025-04-12 14:41:43.871756+05:30');
 
 
 --
@@ -748,6 +766,9 @@ INSERT INTO public.comments VALUES (13, 4, 11, 'jkh', '2025-04-06 23:01:02.32966
 INSERT INTO public.comments VALUES (14, 4, 11, 'asd', '2025-04-06 23:02:41.461797+05:30', '2025-04-06 23:02:41.461797+05:30');
 INSERT INTO public.comments VALUES (15, 4, 12, 'why not', '2025-04-06 23:04:30.888726+05:30', '2025-04-06 23:04:30.888726+05:30');
 INSERT INTO public.comments VALUES (16, 6, 13, 'my name', '2025-04-07 22:08:51.078572+05:30', '2025-04-07 22:08:51.078572+05:30');
+INSERT INTO public.comments VALUES (17, 6, 13, 'hello', '2025-04-12 13:05:10.435175+05:30', '2025-04-12 13:05:10.435175+05:30');
+INSERT INTO public.comments VALUES (18, 6, 13, 'hi', '2025-04-12 14:41:35.571161+05:30', '2025-04-12 14:41:35.571161+05:30');
+INSERT INTO public.comments VALUES (19, 6, 14, 'ok', '2025-04-12 14:54:19.688199+05:30', '2025-04-12 14:54:19.688199+05:30');
 
 
 --
@@ -811,6 +832,185 @@ void* ptr2 = my_malloc(4);
 printf("%s %s\n", 
        ptr1 != NULL ? "ALLOCATED" : "NULL",
        ptr2 != NULL ? "ALLOCATED" : "NULL");', 'ALLOCATED NULL', true, '2025-04-06 20:36:31.347977+05:30', '2025-04-06 20:36:31.347977+05:30', 'Edge case: After allocating 1020 bytes, a request for 4 more bytes should fail (reserved space)');
+INSERT INTO public.test_cases VALUES (143, 14, 'ConfigSingleton* instance = ConfigSingleton::getInstance();
+instance->setValue("special@key#123", "value!@#$%^&*()");
+std::cout << instance->getValue("special@key#123");', 'value!@#$%^&*()', false, '2025-04-12 15:35:56.162908+05:30', '2025-04-12 15:35:56.162908+05:30', 'Test handling special characters in configuration');
+INSERT INTO public.test_cases VALUES (146, 24, '(click)="handleClick()"', 'Event handled successfully', false, '2025-04-12 15:37:11.512627+05:30', '2025-04-12 15:37:11.512627+05:30', 'Test component event handling');
+INSERT INTO public.test_cases VALUES (149, 25, 'try { this.userService.getUserData() } catch (error) { console.error(error) }', 'Error handled successfully', false, '2025-04-12 15:37:33.78258+05:30', '2025-04-12 15:37:33.78258+05:30', 'Test service error handling');
+INSERT INTO public.test_cases VALUES (152, 26, '<div [ngClass]={"active": isActive}>Content</div>', 'Attribute directive applied successfully', false, '2025-04-12 15:38:22.086387+05:30', '2025-04-12 15:38:22.086387+05:30', 'Test attribute directives');
+INSERT INTO public.test_cases VALUES (155, 27, 'try {
+  this.userService.submit(this.userForm.value);
+} catch (error) {
+  this.handleError(error);
+}', 'Form error handled successfully', false, '2025-04-12 15:38:30.717197+05:30', '2025-04-12 15:38:30.717197+05:30', 'Test form error handling');
+INSERT INTO public.test_cases VALUES (158, 28, 'this.http.get("/api/data").subscribe(
+  response => this.handleResponse(response),
+  error => this.handleError(error)
+);', 'HTTP error handled successfully', false, '2025-04-12 15:38:41.027311+05:30', '2025-04-12 15:38:41.027311+05:30', 'Test HTTP error handling');
+INSERT INTO public.test_cases VALUES (161, 29, 'const routes: Routes = [
+  {
+    path: ''admin'',
+    loadChildren: () => import(''./admin/admin.module'').then(m => m.AdminModule)
+  }
+];', 'Lazy loading implemented successfully', false, '2025-04-12 15:39:14.112744+05:30', '2025-04-12 15:39:14.112744+05:30', 'Test lazy loading');
+INSERT INTO public.test_cases VALUES (164, 30, '<div>{{ data$ | async }}</div>', 'Async pipe successful', false, '2025-04-12 15:39:26.72951+05:30', '2025-04-12 15:39:26.72951+05:30', 'Test async pipe');
+INSERT INTO public.test_cases VALUES (167, 31, '<div [style.color]="isActive ? ''red'' : ''blue''">Content</div>', 'Style binding successful', false, '2025-04-12 15:39:37.696775+05:30', '2025-04-12 15:39:37.696775+05:30', 'Test style binding');
+INSERT INTO public.test_cases VALUES (170, 32, 'constructor(private service: DataService) {
+  this.service.initialize();
+}', 'Component initialization successful', false, '2025-04-12 15:39:48.278061+05:30', '2025-04-12 15:39:48.278061+05:30', 'Test component initialization');
+INSERT INTO public.test_cases VALUES (173, 33, '<app-child
+  [data]="parentData"
+  (dataChange)="handleChildData()"
+></app-child>', 'Parent-child communication successful', false, '2025-04-12 15:40:02.592743+05:30', '2025-04-12 15:40:02.592743+05:30', 'Test parent-child communication');
+INSERT INTO public.test_cases VALUES (176, 6, 'char buffer[10];\nstrcpy(buffer, "NOP sled + shellcode");', 'Shellcode executed', false, '2025-04-12 15:41:16.731532+05:30', '2025-04-12 15:41:16.731532+05:30', 'Test shellcode execution');
+INSERT INTO public.test_cases VALUES (179, 4, 'cmp eax, ebx
+je equal_label
+jmp end_label', 'Control flow successful', false, '2025-04-12 15:41:30.402111+05:30', '2025-04-12 15:41:30.402111+05:30', 'Test control flow');
+INSERT INTO public.test_cases VALUES (182, 3, 'for(int i = 0; i < 1000; i++) {
+    for(int j = 0; j < 64; j++) {
+        array[i][j] = i + j;
+    }
+}', 'Cache line utilization > 80%', false, '2025-04-12 15:41:40.705226+05:30', '2025-04-12 15:41:40.705226+05:30', 'Test cache line utilization');
+INSERT INTO public.test_cases VALUES (185, 7, 'docker run -v /host/path:/container/path ubuntu', 'Container volumes mounted successfully', false, '2025-04-12 15:41:50.821907+05:30', '2025-04-12 15:41:50.821907+05:30', 'Test container volumes');
+INSERT INTO public.test_cases VALUES (188, 8, 'kubectl scale deployment nginx-deployment --replicas=5', 'Deployment scaled successfully', false, '2025-04-12 15:42:01.75444+05:30', '2025-04-12 15:42:01.75444+05:30', 'Test scaling');
+INSERT INTO public.test_cases VALUES (191, 9, 'model.predict(X_new)', 'Model prediction successful', false, '2025-04-12 15:42:11.358702+05:30', '2025-04-12 15:42:11.358702+05:30', 'Test model prediction');
+INSERT INTO public.test_cases VALUES (194, 23, 'class BankAccount {
+private:
+    double balance;
+public:
+    void deposit(double amount) {}
+};', 'Encapsulation implemented successfully', false, '2025-04-12 15:42:31.246288+05:30', '2025-04-12 15:42:31.246288+05:30', 'Test encapsulation');
+INSERT INTO public.test_cases VALUES (144, 24, 'ng serve', 'Component initialized successfully', false, '2025-04-12 15:37:05.981903+05:30', '2025-04-12 15:37:05.981903+05:30', 'Test component initialization');
+INSERT INTO public.test_cases VALUES (147, 25, 'constructor(private userService: UserService) {}', 'Service injected successfully', false, '2025-04-12 15:37:27.227316+05:30', '2025-04-12 15:37:27.227316+05:30', 'Test service dependency injection');
+INSERT INTO public.test_cases VALUES (150, 26, '<div>{{ title }}</div>', 'Template rendered successfully', false, '2025-04-12 15:38:13.814089+05:30', '2025-04-12 15:38:13.814089+05:30', 'Test template syntax');
+INSERT INTO public.test_cases VALUES (153, 27, '<form [formGroup]="userForm">
+  <input formControlName="email">
+</form>', 'Form validation successful', false, '2025-04-12 15:38:25.149377+05:30', '2025-04-12 15:38:25.149377+05:30', 'Test form validation');
+INSERT INTO public.test_cases VALUES (156, 28, 'this.http.get("/api/data").subscribe(
+  response => this.handleResponse(response)
+);', 'HTTP GET request successful', false, '2025-04-12 15:38:35.523772+05:30', '2025-04-12 15:38:35.523772+05:30', 'Test HTTP GET request');
+INSERT INTO public.test_cases VALUES (159, 29, '@Injectable()
+export class AuthGuard implements CanActivate {
+  canActivate(): boolean {
+    return this.authService.isAuthenticated();
+  }
+}', 'Route guard implemented successfully', false, '2025-04-12 15:39:02.432795+05:30', '2025-04-12 15:39:02.432795+05:30', 'Test route guard implementation');
+INSERT INTO public.test_cases VALUES (162, 30, '@Pipe({
+  name: ''custom''
+})
+export class CustomPipe implements PipeTransform {
+  transform(value: string): string {
+    return value.toUpperCase();
+  }
+}', 'Pipe transformation successful', false, '2025-04-12 15:39:18.313632+05:30', '2025-04-12 15:39:18.313632+05:30', 'Test pipe transformation');
+INSERT INTO public.test_cases VALUES (165, 31, '@Component({
+  selector: ''app-component'',
+  styles: [`.custom { color: red; }`]
+})', 'Component styling successful', false, '2025-04-12 15:39:30.603392+05:30', '2025-04-12 15:39:30.603392+05:30', 'Test component styling');
+INSERT INTO public.test_cases VALUES (168, 32, 'ngOnInit() {
+  this.initializeData();
+}
+
+ngOnDestroy() {
+  this.cleanup();
+}', 'Component lifecycle successful', false, '2025-04-12 15:39:41.28793+05:30', '2025-04-12 15:39:41.28793+05:30', 'Test component lifecycle');
+INSERT INTO public.test_cases VALUES (171, 33, '@Output() dataChange = new EventEmitter<any>();
+
+updateData() {
+  this.dataChange.emit(newData);
+}', 'Component communication successful', false, '2025-04-12 15:39:53.444076+05:30', '2025-04-12 15:39:53.444076+05:30', 'Test component communication');
+INSERT INTO public.test_cases VALUES (174, 6, 'char buffer[10];
+strcpy(buffer, "AAAAAAAAAAAAAAAA");', 'Segmentation fault', false, '2025-04-12 15:40:57.279058+05:30', '2025-04-12 15:40:57.279058+05:30', 'Test basic buffer overflow');
+INSERT INTO public.test_cases VALUES (177, 4, 'mov eax, 5
+add eax, 3
+mov ebx, eax', 'eax = 8', false, '2025-04-12 15:41:24.459266+05:30', '2025-04-12 15:41:24.459266+05:30', 'Test basic arithmetic');
+INSERT INTO public.test_cases VALUES (180, 3, 'for(int i = 0; i < 1000; i++) {
+    array[i] = i;
+}', 'Cache hit rate > 90%', false, '2025-04-12 15:41:33.618244+05:30', '2025-04-12 15:41:33.618244+05:30', 'Test cache hit');
+INSERT INTO public.test_cases VALUES (183, 7, 'FROM ubuntu:20.04
+RUN apt-get update && apt-get install -y python3
+CMD ["python3"]', 'Container built successfully', false, '2025-04-12 15:41:44.224142+05:30', '2025-04-12 15:41:44.224142+05:30', 'Test container build');
+INSERT INTO public.test_cases VALUES (186, 8, 'apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 3', 'Deployment created successfully', false, '2025-04-12 15:41:55.260487+05:30', '2025-04-12 15:41:55.260487+05:30', 'Test deployment creation');
+INSERT INTO public.test_cases VALUES (189, 9, 'model.fit(X_train, y_train, epochs=10, batch_size=32)', 'Model trained successfully', false, '2025-04-12 15:42:05.141852+05:30', '2025-04-12 15:42:05.141852+05:30', 'Test model training');
+INSERT INTO public.test_cases VALUES (192, 23, 'class Animal {
+    virtual void makeSound() {}
+}
+class Dog : public Animal {
+    void makeSound() override {}
+}', 'Inheritance implemented successfully', false, '2025-04-12 15:42:15.979627+05:30', '2025-04-12 15:42:15.979627+05:30', 'Test inheritance');
+INSERT INTO public.test_cases VALUES (195, 14, 'ConfigSingleton* instance = ConfigSingleton::getInstance();
+instance->setValue("special@key#123", "value!@#$%^&*()");
+std::cout << instance->getValue("special@key#123");', 'value!@#$%^&*()', false, '2025-04-12 16:28:26.403707+05:30', '2025-04-12 16:28:26.403707+05:30', 'Test handling special characters in configuration');
+INSERT INTO public.test_cases VALUES (145, 24, '<app-component [data]="testData"></app-component>', 'Data binding successful', false, '2025-04-12 15:37:08.979994+05:30', '2025-04-12 15:37:08.979994+05:30', 'Test component data binding');
+INSERT INTO public.test_cases VALUES (148, 25, 'this.userService.getUserData()', 'User data retrieved successfully', false, '2025-04-12 15:37:30.997524+05:30', '2025-04-12 15:37:30.997524+05:30', 'Test service method call');
+INSERT INTO public.test_cases VALUES (151, 26, '<div *ngIf="condition">Content</div>', 'Structural directive applied successfully', false, '2025-04-12 15:38:16.513167+05:30', '2025-04-12 15:38:16.513167+05:30', 'Test structural directives');
+INSERT INTO public.test_cases VALUES (154, 27, 'submitForm() {
+  if (this.userForm.valid) {
+    this.userService.submit(this.userForm.value);
+  }
+}', 'Form submitted successfully', false, '2025-04-12 15:38:28.068928+05:30', '2025-04-12 15:38:28.068928+05:30', 'Test form submission');
+INSERT INTO public.test_cases VALUES (157, 28, 'this.http.post("/api/data", data).subscribe(
+  response => this.handleResponse(response)
+);', 'HTTP POST request successful', false, '2025-04-12 15:38:38.123529+05:30', '2025-04-12 15:38:38.123529+05:30', 'Test HTTP POST request');
+INSERT INTO public.test_cases VALUES (160, 29, '@Injectable()
+export class DataResolver implements Resolve<any> {
+  resolve(): Observable<any> {
+    return this.dataService.getData();
+  }
+}', 'Route resolver implemented successfully', false, '2025-04-12 15:39:08.211164+05:30', '2025-04-12 15:39:08.211164+05:30', 'Test route resolver');
+INSERT INTO public.test_cases VALUES (139, 14, 'ConfigSingleton* instance1 = ConfigSingleton::getInstance();
+ConfigSingleton* instance2 = ConfigSingleton::getInstance();
+std::cout << (instance1 == instance2);', '1', false, '2025-04-12 15:34:29.929443+05:30', '2025-04-12 15:34:29.929443+05:30', 'Verify singleton instance uniqueness');
+INSERT INTO public.test_cases VALUES (140, 14, 'ConfigSingleton* instance = ConfigSingleton::getInstance();
+try {
+    std::cout << instance->getValue("nonexistent_key");
+} catch (const std::out_of_range& e) {
+    std::cout << "Key not found";
+}', 'Key not found', false, '2025-04-12 15:34:33.291225+05:30', '2025-04-12 15:34:33.291225+05:30', 'Test error handling for non-existent key');
+INSERT INTO public.test_cases VALUES (141, 14, 'ConfigSingleton* instance = ConfigSingleton::getInstance();
+instance->setValue("timeout", "30");
+std::cout << instance->getValue("timeout");', '30', false, '2025-04-12 15:34:36.590874+05:30', '2025-04-12 15:34:36.590874+05:30', 'Test configuration value storage');
+INSERT INTO public.test_cases VALUES (142, 14, 'ConfigSingleton* instance = ConfigSingleton::getInstance();
+instance->setValue("existing_key", "old_value");
+instance->setValue("existing_key", "new_value");
+std::cout << instance->getValue("existing_key");', 'new_value', false, '2025-04-12 15:34:39.910083+05:30', '2025-04-12 15:34:39.910083+05:30', 'Test updating existing configuration value');
+INSERT INTO public.test_cases VALUES (163, 30, '{{ value | custom | date:''medium'' }}', 'Pipe chaining successful', false, '2025-04-12 15:39:23.591007+05:30', '2025-04-12 15:39:23.591007+05:30', 'Test pipe chaining');
+INSERT INTO public.test_cases VALUES (166, 31, '@Component({
+  selector: ''app-component'',
+  encapsulation: ViewEncapsulation.None
+})', 'View encapsulation successful', false, '2025-04-12 15:39:34.268434+05:30', '2025-04-12 15:39:34.268434+05:30', 'Test view encapsulation');
+INSERT INTO public.test_cases VALUES (169, 32, 'ngOnChanges(changes: SimpleChanges) {
+  if (changes[''data'']) {
+    this.updateView();
+  }
+}', 'Change detection successful', false, '2025-04-12 15:39:44.837174+05:30', '2025-04-12 15:39:44.837174+05:30', 'Test change detection');
+INSERT INTO public.test_cases VALUES (172, 33, '@Injectable()
+export class DataService {
+  private dataSubject = new BehaviorSubject<any>(null);
+  data$ = this.dataSubject.asObservable();
+}', 'Service communication successful', false, '2025-04-12 15:39:59.063727+05:30', '2025-04-12 15:39:59.063727+05:30', 'Test service communication');
+INSERT INTO public.test_cases VALUES (175, 6, 'char buffer[10];
+strcpy(buffer, "AAAAAAAAAAAAAAAAABCD");', 'Return address corrupted', false, '2025-04-12 15:41:06.286224+05:30', '2025-04-12 15:41:06.286224+05:30', 'Test return address overwrite');
+INSERT INTO public.test_cases VALUES (178, 4, 'mov eax, [memory_address]
+mov [memory_address], ebx', 'Memory operations successful', false, '2025-04-12 15:41:27.30473+05:30', '2025-04-12 15:41:27.30473+05:30', 'Test memory operations');
+INSERT INTO public.test_cases VALUES (181, 3, 'for(int i = 0; i < 1000; i += 64) {
+    array[i] = i;
+}', 'Cache miss rate > 50%', false, '2025-04-12 15:41:36.924019+05:30', '2025-04-12 15:41:36.924019+05:30', 'Test cache miss');
+INSERT INTO public.test_cases VALUES (184, 7, 'docker run --network host -p 8080:80 nginx', 'Container networking successful', false, '2025-04-12 15:41:47.452389+05:30', '2025-04-12 15:41:47.452389+05:30', 'Test container networking');
+INSERT INTO public.test_cases VALUES (187, 8, 'apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  type: LoadBalancer', 'Service created successfully', false, '2025-04-12 15:41:58.691838+05:30', '2025-04-12 15:41:58.691838+05:30', 'Test service creation');
+INSERT INTO public.test_cases VALUES (190, 9, 'model.evaluate(X_test, y_test)', 'Model evaluated successfully', false, '2025-04-12 15:42:08.438859+05:30', '2025-04-12 15:42:08.438859+05:30', 'Test model evaluation');
+INSERT INTO public.test_cases VALUES (193, 23, 'Animal* animal = new Dog();
+animal->makeSound();', 'Polymorphism implemented successfully', false, '2025-04-12 15:42:22.77271+05:30', '2025-04-12 15:42:22.77271+05:30', 'Test polymorphism');
 
 
 --
@@ -818,8 +1018,10 @@ printf("%s %s\n",
 --
 
 INSERT INTO public.user_problem_status VALUES (1, 4, 2, 'attempted', 1, '2025-04-06 23:11:37.452388+05:30', NULL, 0);
-INSERT INTO public.user_problem_status VALUES (6, 6, 1, 'solved', 87, '2025-04-08 23:53:06.968058+05:30', '2025-04-08 23:53:06.968058+05:30', 25);
-INSERT INTO public.user_problem_status VALUES (2, 4, 1, 'attempted', 15, '2025-04-07 21:36:23.73482+05:30', NULL, 0);
+INSERT INTO public.user_problem_status VALUES (144, 7, 1, 'solved', 2, '2025-04-12 12:19:17.400831+05:30', '2025-04-12 12:19:17.400831+05:30', 0);
+INSERT INTO public.user_problem_status VALUES (2, 4, 1, 'solved', 18, '2025-04-12 14:55:52.325787+05:30', '2025-04-12 14:55:52.325787+05:30', 1);
+INSERT INTO public.user_problem_status VALUES (152, 6, 14, 'attempted', 1, '2025-04-12 15:45:38.345333+05:30', NULL, 1);
+INSERT INTO public.user_problem_status VALUES (6, 6, 1, 'solved', 97, '2025-04-12 15:55:00.2213+05:30', '2025-04-12 15:55:00.2213+05:30', 31);
 
 
 --
@@ -832,21 +1034,21 @@ INSERT INTO public.user_problem_status VALUES (2, 4, 1, 'attempted', 15, '2025-0
 -- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chessman
 --
 
-SELECT pg_catalog.setval('public.categories_id_seq', 12, true);
+SELECT pg_catalog.setval('public.categories_id_seq', 14, true);
 
 
 --
 -- Name: comments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chessman
 --
 
-SELECT pg_catalog.setval('public.comments_id_seq', 16, true);
+SELECT pg_catalog.setval('public.comments_id_seq', 19, true);
 
 
 --
 -- Name: discussions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chessman
 --
 
-SELECT pg_catalog.setval('public.discussions_id_seq', 13, true);
+SELECT pg_catalog.setval('public.discussions_id_seq', 14, true);
 
 
 --
@@ -860,21 +1062,21 @@ SELECT pg_catalog.setval('public.hints_id_seq', 24, true);
 -- Name: problems_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chessman
 --
 
-SELECT pg_catalog.setval('public.problems_id_seq', 9, true);
+SELECT pg_catalog.setval('public.problems_id_seq', 33, true);
 
 
 --
 -- Name: test_cases_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chessman
 --
 
-SELECT pg_catalog.setval('public.test_cases_id_seq', 6, true);
+SELECT pg_catalog.setval('public.test_cases_id_seq', 195, true);
 
 
 --
 -- Name: user_problem_status_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chessman
 --
 
-SELECT pg_catalog.setval('public.user_problem_status_id_seq', 132, true);
+SELECT pg_catalog.setval('public.user_problem_status_id_seq', 156, true);
 
 
 --
@@ -888,7 +1090,7 @@ SELECT pg_catalog.setval('public.user_progress_id_seq', 1, false);
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chessman
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 6, true);
+SELECT pg_catalog.setval('public.users_id_seq', 7, true);
 
 
 --
