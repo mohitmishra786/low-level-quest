@@ -15,6 +15,11 @@ function ProblemsPage() {
     medium: { solved: 0, total: 0 },
     hard: { solved: 0, total: 0 },
   });
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [problemsPerPage] = useState(7);
+  const [totalProblems, setTotalProblems] = useState(0);
 
   useEffect(() => {
     const loadData = async () => {
@@ -31,21 +36,29 @@ function ProblemsPage() {
     };
 
     loadData();
-  }, []);
+  }, [currentPage, activeFilter]); // Add currentPage and activeFilter as dependencies
 
   const fetchProblems = async () => {
     try {
-      const response = await API.get("/api/problems");
-      console.log("Problems data:", response.data);
-      setProblems(response.data);
+      // Calculate offset based on current page
+      const offset = (currentPage - 1) * problemsPerPage;
+      
+      // Fetch all problems first
+      const response = await API.get(`/api/problems?filter=${activeFilter}`);
+      const allProblems = response.data.problems || response.data;
+      
+      // Set total problems count
+      setTotalProblems(allProblems.length);
+      
+      // Manually paginate the problems
+      const paginatedProblems = allProblems.slice(offset, offset + problemsPerPage);
+      setProblems(paginatedProblems);
 
-      // Only set total counts, don't override solved counts
-      const total = response.data.length;
-      const easy = response.data.filter((p) => p.difficulty === "Easy").length;
-      const medium = response.data.filter(
-        (p) => p.difficulty === "Medium"
-      ).length;
-      const hard = response.data.filter((p) => p.difficulty === "Hard").length;
+      // Calculate stats based on all problems
+      const total = allProblems.length;
+      const easy = allProblems.filter((p) => p.difficulty === "Easy").length;
+      const medium = allProblems.filter((p) => p.difficulty === "Medium").length;
+      const hard = allProblems.filter((p) => p.difficulty === "Hard").length;
 
       setUserStats((prevStats) => ({
         ...prevStats,
@@ -83,18 +96,7 @@ function ProblemsPage() {
   const handleFilterChange = (filter) => {
     console.log("Changing filter to:", filter);
     setActiveFilter(filter);
-
-    // Reload data with new filter
-    const loadData = async () => {
-      try {
-        await fetchProblems();
-        await fetchUserStats();
-      } catch (error) {
-        console.error("Error loading data with new filter:", error);
-      }
-    };
-
-    loadData();
+    setCurrentPage(1); // Reset to first page when filter changes
   };
 
   const handlePickAny = () => {
@@ -103,6 +105,57 @@ function ProblemsPage() {
       const randomProblem = problems[randomIndex];
       window.location.href = `/problem/${randomProblem.id}`;
     }
+  };
+  
+  // Pagination handlers
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo(0, 0); // Scroll to top when page changes
+  };
+  
+  // Calculate pagination values
+  const totalPages = Math.ceil(totalProblems / problemsPerPage);
+  
+  // Generate page numbers to display
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const maxPagesToShow = 3; // Reduced from 5 to 3 for more compact display
+    
+    if (totalPages <= maxPagesToShow) {
+      // Show all pages if total is less than max
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+      }
+    } else {
+      // Always show first page
+      if (currentPage > 2) {
+        pageNumbers.push(1);
+        if (currentPage > 3) {
+          pageNumbers.push('...');
+        }
+      }
+      
+      // Show current page and adjacent pages
+      for (let i = Math.max(1, currentPage - 1); 
+           i <= Math.min(totalPages, currentPage + 1); 
+           i++) {
+        if (!pageNumbers.includes(i)) {
+          pageNumbers.push(i);
+        }
+      }
+      
+      // Show last page
+      if (currentPage < totalPages - 1) {
+        if (currentPage < totalPages - 2) {
+          pageNumbers.push('...');
+        }
+        if (!pageNumbers.includes(totalPages)) {
+          pageNumbers.push(totalPages);
+        }
+      }
+    }
+    
+    return pageNumbers;
   };
 
   return (
@@ -145,7 +198,7 @@ function ProblemsPage() {
                 <span>Top 25 Problems</span>
               </button>
               <button
-                className="filter-btn pick-any"
+                className={`filter-btn pick-any`}
                 onClick={handlePickAny}
               >
                 <span className="filter-icon">🎲</span>
@@ -196,6 +249,52 @@ function ProblemsPage() {
                   ))}
                 </tbody>
               </table>
+              
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="pagination-container">
+                  <ul className="pagination">
+                    <li className="pagination-item">
+                      <button 
+                        className={`pagination-button ${currentPage === 1 ? 'disabled' : ''}`}
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                      >
+                        Previous
+                      </button>
+                    </li>
+                    
+                    {getPageNumbers().map((pageNumber, index) => (
+                      <li className="pagination-item" key={index}>
+                        {pageNumber === '...' ? (
+                          <span className="pagination-button disabled">...</span>
+                        ) : (
+                          <button
+                            className={`pagination-button ${currentPage === pageNumber ? 'active' : ''}`}
+                            onClick={() => handlePageChange(pageNumber)}
+                          >
+                            {pageNumber}
+                          </button>
+                        )}
+                      </li>
+                    ))}
+                    
+                    <li className="pagination-item">
+                      <button 
+                        className={`pagination-button ${currentPage === totalPages ? 'disabled' : ''}`}
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                      >
+                        Next
+                      </button>
+                    </li>
+                  </ul>
+                  
+                  <div className="pagination-info">
+                    Showing {((currentPage - 1) * problemsPerPage) + 1} - {Math.min(currentPage * problemsPerPage, totalProblems)} of {totalProblems} problems
+                  </div>
+                </div>
+              )}
             </div>
             
             <div className="stats-container">
