@@ -1,20 +1,23 @@
 .discussion-section {
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    color: #e0e0e0;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
 }
 
 .new-discussion-form {
     margin-bottom: 30px;
     padding: 20px;
-    background-color: #f8f9fa;
+    background-color: #1c1c1c;
     border-radius: 8px;
+    border: 1px solid #333;
 }
 
 .new-discussion-form h3 {
     margin: 0 0 15px 0;
-    color: #333;
+    color: #ffd700;
+    font-size: 18px;
 }
 
 .new-discussion-form form {
@@ -25,30 +28,34 @@
 
 .new-discussion-form input,
 .new-discussion-form textarea {
-    padding: 10px;
-    border: 1px solid #ddd;
+    padding: 12px;
+    background-color: #2a2a2a;
+    border: 1px solid #444;
     border-radius: 4px;
     font-size: 14px;
+    color: #e0e0e0;
+    width: 100%;
 }
 
 .new-discussion-form textarea {
-    min-height: 100px;
+    min-height: 120px;
     resize: vertical;
 }
 
 .new-discussion-form button {
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #2196F3;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 500;
     align-self: flex-start;
+    transition: background-color 0.2s;
 }
 
 .new-discussion-form button:hover {
-    background-color: #0056b3;
+    background-color: #1976D2;
 }
 
 .discussions-list {
@@ -57,56 +64,56 @@
     gap: 20px;
 }
 
-.discussions-list h3 {
-    margin: 0 0 15px 0;
-    color: #333;
-}
-
 .discussion-item {
     padding: 20px;
-    background-color: #f8f9fa;
+    background-color: #1c1c1c;
     border-radius: 8px;
-    border: 1px solid #e0e0e0;
+    border: 1px solid #333;
 }
 
 .discussion-header {
     margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
 }
 
 .discussion-header h4 {
     margin: 0 0 5px 0;
-    color: #333;
+    color: #ffd700;
+    font-size: 16px;
 }
 
 .discussion-meta {
     font-size: 14px;
-    color: #666;
+    color: #888;
 }
 
 .discussion-content {
     margin-bottom: 15px;
     line-height: 1.6;
-    color: #333;
+    color: #e0e0e0;
 }
 
 .view-comments-btn {
     padding: 8px 16px;
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
+    background-color: #2a2a2a;
+    border: 1px solid #444;
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
-    color: #333;
+    color: #ccc;
+    transition: background-color 0.2s;
 }
 
 .view-comments-btn:hover {
-    background-color: #e0e0e0;
+    background-color: #333;
 }
 
 .comments-section {
     margin-top: 15px;
     padding-top: 15px;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #333;
 }
 
 .comments-list {
@@ -118,19 +125,20 @@
 
 .comment-item {
     padding: 15px;
-    background-color: white;
+    background-color: #2a2a2a;
     border-radius: 4px;
-    border: 1px solid #ddd;
+    border: 1px solid #444;
 }
 
 .comment-content {
     margin-bottom: 10px;
     line-height: 1.5;
+    color: #e0e0e0;
 }
 
 .comment-meta {
     font-size: 12px;
-    color: #666;
+    color: #888;
 }
 
 .new-comment-form {
@@ -140,57 +148,60 @@
 }
 
 .new-comment-form textarea {
-    padding: 10px;
-    border: 1px solid #ddd;
+    padding: 12px;
+    background-color: #2a2a2a;
+    border: 1px solid #444;
     border-radius: 4px;
     min-height: 80px;
     resize: vertical;
     font-size: 14px;
+    color: #e0e0e0;
 }
 
 .new-comment-form button {
     padding: 8px 16px;
-    background-color: #007bff;
+    background-color: #2196F3;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 500;
     align-self: flex-start;
+    transition: background-color 0.2s;
 }
 
 .new-comment-form button:hover {
-    background-color: #0056b3;
+    background-color: #1976D2;
 }
 
 .no-discussions {
     text-align: center;
     padding: 30px;
-    color: #666;
-    background-color: #f8f9fa;
+    color: #888;
+    background-color: #1c1c1c;
     border-radius: 8px;
-    border: 1px dashed #ddd;
+    border: 1px dashed #444;
 }
 
 .no-comments {
     text-align: center;
     padding: 15px;
-    color: #666;
-    background-color: white;
+    color: #888;
+    background-color: #2a2a2a;
     border-radius: 4px;
-    border: 1px dashed #ddd;
+    border: 1px dashed #444;
 }
 
 .loading {
     text-align: center;
     padding: 20px;
-    color: #666;
+    color: #888;
 }
 
 .error {
     text-align: center;
     padding: 20px;
-    color: #dc3545;
-    background-color: #f8d7da;
+    color: #f44336;
+    background-color: rgba(244, 67, 54, 0.1);
     border-radius: 4px;
 }
