@@ -1,224 +1,112 @@
-# Low Level Quest
+# Low-Level Quest
 
 A platform for learning and practicing low-level programming concepts through interactive coding challenges.
 
+## Overview
+
+Low-Level Quest is an educational platform designed to help developers master low-level programming concepts through hands-on coding challenges. The platform covers various domains including algorithms, operating systems, networking, databases, security, and more.
+
 ## Features
 
-### Current Functionality
+- **Interactive Coding Challenges**: Solve real-world problems in various programming domains
+- **Multiple Programming Languages**: Support for C, C++, Java, Python, JavaScript, and more
+- **Real-time Code Execution**: Get immediate feedback on your solutions
+- **Visualizations**: See how your code executes with domain-specific visualizations
+- **Comprehensive Feedback**: Detailed analysis of your code's performance and correctness
+- **Learning Resources**: Access to hints, discussions, and educational content
+- **Progress Tracking**: Track your progress and achievements
 
-#### Problem Categories
-- Memory Management
-- Data Structures
-- Algorithms
+## Architecture
 
-#### User Management
-- User registration and authentication
-- Progress tracking per category
-- Problem completion status
+The platform consists of the following components:
 
-#### Problem Solving
-- Interactive code editor
-- Real-time code execution
-- Test case validation
-- Hints system
-- Problem difficulty levels
-
-#### Community Features
-- Discussion board per problem
-- Comment system
-- User progress tracking
-
-### API Endpoints
-
-#### Authentication
-```
-POST /api/auth/register
-- Register a new user
-- Body: { username, email, password }
-- Returns: { token, user }
-
-POST /api/auth/login
-- Login existing user
-- Body: { email, password }
-- Returns: { token, user }
-
-GET /api/auth/profile
-- Get current user profile
-- Headers: Authorization: Bearer <token>
-- Returns: { user }
-```
-
-#### Problems
-```
-GET /api/problems
-- Get all problems
-- Query params: { category, difficulty }
-- Returns: [{ id, title, description, difficulty, category }]
-
-GET /api/problems/:id
-- Get specific problem details
-- Returns: { problem, testCases: [...], hints: [...] }
-
-POST /api/problems/:id/run
-- Run code against test cases
-- Body: { code }
-- Returns: { success, output, error, testResults }
-
-POST /api/problems/:id/submit
-- Submit solution for verification
-- Body: { code }
-- Returns: { success, solved, testResults }
-```
-
-#### Categories
-```
-GET /api/categories
-- Get all categories
-- Returns: [{ id, name, description }]
-
-GET /api/categories/:id/problems
-- Get problems in category
-- Returns: [{ id, title, difficulty }]
-```
-
-#### User Progress
-```
-GET /api/progress
-- Get user's overall progress
-- Headers: Authorization: Bearer <token>
-- Returns: { categoriesProgress: [...], problemsSolved, totalAttempts }
-
-GET /api/progress/:categoryId
-- Get progress in specific category
-- Headers: Authorization: Bearer <token>
-- Returns: { problemsSolved, totalAttempts, lastActivity }
-```
-
-#### Discussions
-```
-GET /api/problems/:id/discussions
-- Get discussions for a problem
-- Returns: [{ id, title, content, user, comments: [...] }]
-
-POST /api/problems/:id/discussions
-- Create new discussion
-- Body: { title, content }
-- Headers: Authorization: Bearer <token>
-- Returns: { discussion }
-
-POST /api/discussions/:id/comments
-- Add comment to discussion
-- Body: { content }
-- Headers: Authorization: Bearer <token>
-- Returns: { comment }
-```
-
-#### Hints
-```
-GET /api/problems/:id/hints
-- Get hints for a problem
-- Headers: Authorization: Bearer <token>
-- Returns: [{ content, orderNumber }]
-```
-
-## Database Schema
-
-The platform uses PostgreSQL with the following main tables:
-- categories
-- problems
-- test_cases
-- users
-- user_problem_status
-- user_progress
-- discussions
-- comments
-- hints
-
-## Future Enhancements
-
-### Planned Features
-1. **Advanced Code Execution**
-   - Support for multiple programming languages
-   - Interactive debugging capabilities
-   - Memory usage visualization
-
-2. **Learning Path**
-   - Structured learning tracks
-   - Prerequisites system
-   - Difficulty progression
-
-3. **Social Features**
-   - User rankings and leaderboards
-   - Achievement system
-   - Code sharing and collaboration
-
-4. **Content Enhancement**
-   - Video explanations
-   - Interactive tutorials
-   - More problem categories
-   - Community-contributed problems
-
-5. **Performance Optimization**
-   - Code execution sandboxing
-   - Caching system
-   - Rate limiting
-
-6. **UI/UX Improvements**
-   - Dark mode
-   - Customizable editor themes
-   - Mobile responsiveness
-   - Accessibility features
-
-### API Enhancements
-1. **User Management**
-   - Password reset
-   - Email verification
-   - OAuth integration
-   - Profile customization
-
-2. **Problem Management**
-   - Problem creation interface
-   - Test case generation
-   - Custom input testing
-
-3. **Analytics**
-   - User performance metrics
-   - Problem difficulty analysis
-   - Learning progress tracking
+1. **Frontend**: React-based user interface
+2. **Backend**: Node.js API server
+3. **Database**: PostgreSQL for data storage
+4. **Executor System**: Modular framework for code execution and evaluation
+5. **Docker Containers**: Isolated environments for secure code execution
 
 ## Getting Started
 
 ### Prerequisites
-- Node.js
-- PostgreSQL
+
+- Docker and Docker Compose
+- Node.js (v14 or higher)
 - npm or yarn
 
 ### Installation
-1. Clone the repository
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/low-level-quest.git
+   cd low-level-quest
+   ```
+
+2. Install dependencies:
+   ```bash
+   # Install backend dependencies
+   cd backend
+   npm install
+
+   # Install frontend dependencies
+   cd ../frontend
+   npm install
+   ```
+
+3. Set up environment variables:
+   ```bash
+   # Create .env file in the backend directory
+   cp backend/.env.example backend/.env
+   # Edit the .env file with your configuration
+   ```
+
+4. Start the application using Docker Compose:
+   ```bash
+   docker-compose up -d
+   ```
+
+5. Access the application:
+   - Frontend: http://localhost:8080
+   - Backend API: http://localhost:3000
+
+## Development
+
+### Running Tests
+
 ```bash
-git clone https://github.com/yourusername/low-level-quest.git
+# Run backend tests
+cd backend
+npm test
+
+# Run frontend tests
+cd frontend
+npm test
 ```
 
-2. Install dependencies
-```bash
-cd low-level-quest
-npm install
-```
+### Adding New Problems
 
-3. Set up the database
-```bash
-psql -d lowlevel_quest -f database_dump.sql
-```
+1. Create a new problem in the database
+2. Implement the problem description and test cases
+3. Create a solution template
+4. Add hints and educational content
 
-4. Start the development server
-```bash
-npm run dev
-```
+### Adding New Executors
+
+See the [Executor System Documentation](docs/executors.md) for details on how to add new executors.
 
 ## Contributing
 
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+1. Fork the repository
+2. Create a feature branch
+3. Write tests
+4. Implement changes
+5. Submit pull request
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Thanks to all contributors who have helped shape this project
+- Inspired by various coding challenge platforms and educational resources
